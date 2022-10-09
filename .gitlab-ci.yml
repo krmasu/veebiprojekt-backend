@@ -7,7 +7,6 @@ build backend:
   tags:
     - backend-runner
   script:
-    - ./mvnw package
     - docker build -t web-project-backend .
 
 deploy backend:
