@@ -4,9 +4,6 @@ stages:
 
 build backend:
   stage: build
-  only:
-    refs:
-      - master
   tags:
     - backend-runner
   script:
@@ -15,9 +12,6 @@ build backend:
 
 deploy backend:
   stage: deploy
-  only:
-    refs:
-      - master
   tags:
     - backend-runner
   script:
