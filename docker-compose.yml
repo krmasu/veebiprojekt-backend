@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+    web-project:
+        image: web-project-backend:latest
+        container_name: web-project-backend
+        restart: always
+        ports:
+            - "8080:8080"
+        volumes:
+            - /opt/web-project/backend/application.properties:/app/application.properties
