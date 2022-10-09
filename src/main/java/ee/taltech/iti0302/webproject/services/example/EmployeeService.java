@@ -21,7 +21,7 @@ public class EmployeeService {
 
     public void save() {
         Employee e = new Employee();
-        e.setFirstName("Mingi Nimi");
+        e.setFirstName("Mingi Nimi2");
         employeeRepository.save(e);
     }
 
