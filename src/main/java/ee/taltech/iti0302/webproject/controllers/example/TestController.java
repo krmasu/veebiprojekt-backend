@@ -22,24 +22,24 @@ public class TestController {
     public String hello() {
         return "Hello World";
     }
-    @GetMapping("test")
+    @GetMapping("api/test")
     public String test() {
         return "test";
     }
 
-    // http://localhost:8080/employee/1
-    @GetMapping("employee/{employeeId}")
+    // http://localhost:8080/api/employee/1
+    @GetMapping("api/employee/{employeeId}")
     public Optional<Employee> getEmployeeById(@PathVariable("employeeId") Integer employeeId) {
         return employeeService.findById(employeeId);
     }
 
     // http://localhost:8080/employee?firstName=mingiNimiAndmebaasist
-    @GetMapping("employee")
+    @GetMapping("api/employee")
     public List<Employee> getEmployeeByFirstName(@RequestParam("firstName") String firstName) {
         return employeeService.findByFirstName(firstName);
     }
 
-    @GetMapping("employee2")
+    @GetMapping("api/employee2")
     public List<Employee> getEmployeeByFirstNameContains(@RequestParam("firstNameContains") String firstNameContains) {
         return employeeService.findByFirstNameContains(firstNameContains);
     }

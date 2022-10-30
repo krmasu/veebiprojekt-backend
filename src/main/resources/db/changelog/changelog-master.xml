@@ -1,0 +1,54 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro
+        http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd"
+        logicalFilePath="src/main/resources/db/changelog/changelog-master.xml">
+    <changeSet author="andre (generated)" id="1666538749030-1">
+        <createTable tableName="employee">
+            <column autoIncrement="true" name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="employee_pk"/>
+            </column>
+            <column name="first_name" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_code" type="VARCHAR(11)"/>
+            <column name="role_id" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="andre (generated)" id="1666538749030-2">
+        <createTable tableName="role">
+            <column autoIncrement="true" name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="role_pk"/>
+            </column>
+            <column name="name" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="andre (generated)" id="1666538749030-3">
+        <createIndex indexName="employee_id_code_uindex" tableName="employee" unique="true">
+            <column name="id_code"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="andre (generated)" id="1666538749030-4">
+        <createIndex indexName="role_name_uindex" tableName="role" unique="true">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="andre (generated)" id="1666538749030-5">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="employee" constraintName="employee_role_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="role" validate="true"/>
+    </changeSet>
+    <changeSet id="1666538749030-6" author="andreas">
+        <addColumn tableName="employee">
+            <column name="team_id" type="INTEGER"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

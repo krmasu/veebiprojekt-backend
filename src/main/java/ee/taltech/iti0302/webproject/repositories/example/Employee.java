@@ -1,7 +1,5 @@
 package ee.taltech.iti0302.webproject.repositories.example;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
