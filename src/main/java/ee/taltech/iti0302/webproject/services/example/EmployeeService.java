@@ -1,6 +1,7 @@
 package ee.taltech.iti0302.webproject.services.example;
 
-import ee.taltech.iti0302.webproject.repositories.example.Employee;
+import ee.taltech.iti0302.webproject.dto.EmployeeDto;
+import ee.taltech.iti0302.webproject.entities.Employee;
 import ee.taltech.iti0302.webproject.repositories.example.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,9 +13,10 @@ import java.util.Optional;
 @Service
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
+    private final EmployeeMapper employeeMapper;
 
-    public Optional<Employee> findById(Integer employeeId) {
-        return employeeRepository.findById(employeeId);
+    public Optional<EmployeeDto> findById(Integer employeeId) {
+        return employeeRepository.findById(employeeId).map(employeeMapper::toDto);
     }
 
     public void save() {
@@ -24,10 +26,10 @@ public class EmployeeService {
         employeeRepository.save(e);
     }
 
-    public List<Employee> findByFirstName(String firstName) {
-        return employeeRepository.findAllByFirstNameIgnoreCase(firstName);
+    public List<EmployeeDto> findByFirstName(String firstName) {
+        return employeeMapper.toDtoList(employeeRepository.findAllByFirstNameIgnoreCase(firstName));
     }
-    public List<Employee> findByFirstNameContains(String firstName) {
-        return employeeRepository.findAllByFirstNameContainsIgnoreCase(firstName);
+    public List<EmployeeDto> findByFirstNameContains(String firstName) {
+        return employeeMapper.toDtoList(employeeRepository.findAllByFirstNameContainsIgnoreCase(firstName));
     }
 }
