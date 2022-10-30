@@ -2,18 +2,16 @@ package ee.taltech.iti0302.webproject.services.example;
 
 import ee.taltech.iti0302.webproject.repositories.example.Employee;
 import ee.taltech.iti0302.webproject.repositories.example.EmployeeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
-
-    public EmployeeService(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
-    }
 
     public Optional<Employee> findById(Integer employeeId) {
         return employeeRepository.findById(employeeId);

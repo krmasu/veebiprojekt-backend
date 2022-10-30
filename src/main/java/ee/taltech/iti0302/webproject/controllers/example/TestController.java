@@ -2,6 +2,7 @@ package ee.taltech.iti0302.webproject.controllers.example;
 
 import ee.taltech.iti0302.webproject.repositories.example.Employee;
 import ee.taltech.iti0302.webproject.services.example.EmployeeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,13 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @RestController
 public class TestController {
     private final EmployeeService employeeService;
-
-    public TestController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
 
     @GetMapping
     public String hello() {
