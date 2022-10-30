@@ -10,7 +10,6 @@ build backend:
   tags:
     - backend-runner
   script:
-    - liquibase update
     - ./mvnw package
     - docker build -t web-project-backend .
 
