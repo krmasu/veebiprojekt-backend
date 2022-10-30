@@ -10,6 +10,7 @@ build backend:
   tags:
     - backend-runner
   script:
+    - docker run --name postgres -e POSTGRES_PASSWORD=docker -d postgres
     - ./mvnw package
     - docker build -t web-project-backend .
 
