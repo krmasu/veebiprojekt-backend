@@ -151,4 +151,16 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="2022-11-05 drop table milestone_tasks" author="andreas">
+        <dropTable tableName="milestone_tasks"/>
+    </changeSet>
+    <changeSet id="2022-11-05 drop table project_milestones" author="andreas">
+        <dropTable tableName="project_milestones"/>
+    </changeSet>
+    <changeSet id="2022-11-05 drop table project_tasks" author="andreas">
+        <dropTable tableName="project_tasks"/>
+    </changeSet>
+    <changeSet id="2022-11-05 drop table user_projects" author="andreas">
+        <dropTable tableName="user_projects"/>
+    </changeSet>
 </databaseChangeLog>
