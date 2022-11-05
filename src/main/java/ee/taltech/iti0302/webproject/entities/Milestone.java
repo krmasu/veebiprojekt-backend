@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Getter @Setter
 @Entity
@@ -21,5 +22,8 @@ public class Milestone {
 
     private Date startDate;
     private Date endDate;
+
+    @OneToMany(mappedBy = "milestone")
+    private List<Task> tasks;
 
 }

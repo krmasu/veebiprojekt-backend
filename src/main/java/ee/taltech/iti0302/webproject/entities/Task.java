@@ -29,7 +29,13 @@ public class Task {
     @JoinColumn(name = "status_id")
     private Status status;
 
-    private List<Integer> labelIds;
+    @ManyToMany
+    @JoinTable(
+            name = "task_labels",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "label_id")
+    )
+    private List<Label> labels;
 
     @ManyToOne
     @JoinColumn(name = "milestone_id")

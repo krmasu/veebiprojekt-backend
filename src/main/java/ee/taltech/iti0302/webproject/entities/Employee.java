@@ -13,7 +13,6 @@ public class Employee {
     private Integer id;
     private String firstName;
     private String idCode;
-    private Integer roleId;
 
     @ManyToOne
     @JoinColumn(name = "role_id")

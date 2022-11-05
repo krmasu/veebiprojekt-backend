@@ -8,15 +8,17 @@ import java.util.List;
 
 @Getter @Setter
 @Entity
-public class Project {
+@Table(name = "label")
+public class Label {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String title;
 
-    @OneToMany(mappedBy = "project")
-    private List<Milestone> milestones;
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
 
-    @OneToMany(mappedBy = "project")
+    @ManyToMany(mappedBy = "labels")
     private List<Task> tasks;
 }
