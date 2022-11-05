@@ -17,4 +17,12 @@ public class User {
 
     @OneToMany(mappedBy = "assignee")
     private List<Task> assignedTasks;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_projects",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id")
+    )
+    private List<Project> projects;
 }

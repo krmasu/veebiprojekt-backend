@@ -8,7 +8,6 @@ import java.util.List;
 
 @Getter @Setter
 @Entity
-@Table(name = "label")
 public class Label {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
