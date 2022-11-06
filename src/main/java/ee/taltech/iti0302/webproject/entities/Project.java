@@ -30,5 +30,5 @@ public class Project {
     private List<Task> tasks;
 
     @ManyToMany(mappedBy = "projects")
-    private List<User> users;
+    private List<AppUser> users;
 }

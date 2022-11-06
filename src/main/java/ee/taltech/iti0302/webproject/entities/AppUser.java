@@ -8,12 +8,14 @@ import java.util.List;
 
 @Getter @Setter
 @Entity
-public class User {
+public class AppUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String username;
     private String email;
+    private String passwordHash;
+    private String passwordSalt;
 
     @OneToMany(mappedBy = "assignee")
     private List<Task> assignedTasks;
