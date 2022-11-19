@@ -195,4 +195,31 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="2022-11-06 add column password_hash to user table" author="andreas">
+        <addColumn tableName="user">
+            <column name="password_hash" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="2022-11-06 add column password_salt to user table" author="andreas">
+        <addColumn tableName="user">
+            <column name="password_salt" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="2022-11-07 rename user to app_user" author="andreas">
+        <renameTable oldTableName="user" newTableName="app_user"/>
+        <dropForeignKeyConstraint baseTableName="task" constraintName="task_assignee_id_fk"/>
+        <dropForeignKeyConstraint baseTableName="user_projects" constraintName="user_projects_user_id_fk"/>
+    </changeSet>
+    <changeSet id="2022-11-07 add task_assignee_id_fk" author="andreas">
+        <addForeignKeyConstraint baseTableName="task" baseColumnNames="assignee_id" constraintName="task_assignee_id_fk" referencedTableName="app_user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="2022-11-07 add user_projects_user_id_fk" author="andreas">
+        <addForeignKeyConstraint baseTableName="user_projects" baseColumnNames="user_id" constraintName="user_projects_user_id_fk" referencedTableName="app_user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
 </databaseChangeLog>
