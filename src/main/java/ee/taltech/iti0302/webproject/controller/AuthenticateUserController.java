@@ -3,6 +3,7 @@ package ee.taltech.iti0302.webproject.controller;
 import ee.taltech.iti0302.webproject.dto.AuthenticateUserDto;
 import ee.taltech.iti0302.webproject.dto.LoginUserDto;
 import ee.taltech.iti0302.webproject.dto.RegisterUserDto;
+import ee.taltech.iti0302.webproject.dto.UserCreatedDto;
 import ee.taltech.iti0302.webproject.service.AuthenticateUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class AuthenticateUserController {
     @PostMapping("api/register")
     public ResponseEntity<Object> registerUser(@RequestBody RegisterUserDto request) {
         authenticateUserService.registerUser(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return new ResponseEntity<>(new UserCreatedDto("Registration successful", true), HttpStatus.CREATED);
     }
 
     @GetMapping("api/login")
