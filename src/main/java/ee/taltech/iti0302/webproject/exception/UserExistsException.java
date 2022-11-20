@@ -13,7 +13,8 @@ public class UserExistsException extends RuntimeException {
     @AllArgsConstructor
     public enum Reason {
         USERNAME("Username"),
-        EMAIL("Email");
+        EMAIL("Email"),
+        ID("Id");
         private final String capitalized;
     }
 }

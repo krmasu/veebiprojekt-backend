@@ -25,7 +25,7 @@ public class AuthenticateUserController {
         return new ResponseEntity<>(new UserCreatedDto("Registration successful", true), HttpStatus.CREATED);
     }
 
-    @GetMapping("api/login")
+    @PostMapping("api/login")
     public LoginUserDto loginUser(@RequestBody AuthenticateUserDto request) {
         return authenticateUserService.loginUser(request);
     }

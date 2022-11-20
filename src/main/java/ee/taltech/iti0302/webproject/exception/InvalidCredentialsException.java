@@ -12,7 +12,8 @@ public class InvalidCredentialsException extends RuntimeException {
     @AllArgsConstructor
     public enum Reason {
         USERNAME("Username"),
-        PASSWORD("Password");
+        PASSWORD("Password"),
+        ID("Id");
 
         private final String capitalized;
     }
