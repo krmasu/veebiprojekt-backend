@@ -118,5 +118,6 @@ services:
 - Build Docker image: `docker build -t web-project-backend .`
 - In project folder: `docker-compose up`
 
-### Wiki
-[Wiki](https://gitlab.cs.ttu.ee/andrsa/veebiprojekt-backend/-/wikis/home)
+### Links
+[Wiki](https://gitlab.cs.ttu.ee/andrsa/veebiprojekt-backend/-/wikis/home) <br>
+[Frontend repository](https://gitlab.cs.ttu.ee/andrsa/veebiprojekt-frontend)
