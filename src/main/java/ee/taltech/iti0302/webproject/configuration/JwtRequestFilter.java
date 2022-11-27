@@ -6,6 +6,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Key;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -31,16 +33,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return;
         }
         Claims tokenBody = parseToken(jwt.get());
-
         SecurityContext context = SecurityContextHolder.getContext();
-        context.setAuthentication(buildAuthToken(tokenBody));
+
+        UsernamePasswordAuthenticationToken authenticationToken = buildAuthToken(tokenBody);
+        context.setAuthentication(authenticationToken);
 
         filterChain.doFilter(request, response);
     }
 
     private UsernamePasswordAuthenticationToken buildAuthToken(Claims claims) {
-        return new UsernamePasswordAuthenticationToken(claims.get("username"),
-                "");
+        return new UsernamePasswordAuthenticationToken(claims.get("sub"),
+                "",
+                List.of(new SimpleGrantedAuthority("USER")));
     }
 
     private Optional<String> getToken(HttpServletRequest request) {
