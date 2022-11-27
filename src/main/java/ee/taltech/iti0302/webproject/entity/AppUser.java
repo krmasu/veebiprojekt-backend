@@ -14,8 +14,7 @@ public class AppUser {
     private Integer id;
     private String username;
     private String email;
-    private String passwordHash;
-    private String passwordSalt;
+    private String password;
 
     @OneToMany(mappedBy = "assignee")
     private List<Task> assignedTasks;
