@@ -13,6 +13,6 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
     LoginUserDto toLoginUserDto(AppUser user, List<ProjectDto> projects);
-    LoginResponseDto toLoginResponseDto(String authToken, String email, List<ProjectDto> projects);
+    LoginResponseDto toLoginResponseDto(String authToken, String email, List<ProjectDto> projects, Integer id);
     AppUser toEntity(RegisterUserDto userDto);
 }

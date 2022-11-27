@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -22,7 +24,7 @@ public class ProjectController {
     }
 
     @PostMapping("api/project")
-    public ProjectDto createProject(@RequestBody CreateProjectDto createProjectDto) {
+    public List<ProjectDto> createProject(@RequestBody CreateProjectDto createProjectDto) {
         return projectService.createProject(createProjectDto);
     }
 }

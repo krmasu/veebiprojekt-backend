@@ -74,7 +74,7 @@ public class AuthenticateUserService {
                     .compact();
             List<Project> projects = user.getProjects();
             List<ProjectDto> projectDtoList = projectMapper.toDtoList(projects);
-            return userMapper.toLoginResponseDto(authToken, user.getEmail(), projectDtoList);
+            return userMapper.toLoginResponseDto(authToken, user.getEmail(), projectDtoList, user.getId());
         } else {
             throw new InvalidCredentialsException(InvalidCredentialsException.Reason.PASSWORD);
         }

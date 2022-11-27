@@ -7,10 +7,12 @@ import ee.taltech.iti0302.webproject.entity.Project;
 import ee.taltech.iti0302.webproject.exception.ResourceNotFoundException;
 import ee.taltech.iti0302.webproject.repository.ProjectRepository;
 import ee.taltech.iti0302.webproject.mapper.ProjectMapper;
+import ee.taltech.iti0302.webproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class ProjectService {
         return projectMapper.toDto(project);
     }
 
-    public ProjectDto createProject(CreateProjectDto createProjectDto) {
+    public List<ProjectDto> createProject(CreateProjectDto createProjectDto) {
         Project project = new Project();
         project.setTitle(createProjectDto.getTitle());
 
@@ -37,6 +39,6 @@ public class ProjectService {
         Project savedProject = projectRepository.save(project);
         user.getProjects().add(savedProject);
 
-        return projectMapper.toDto(savedProject);
+        return projectMapper.toDtoList(user.getProjects());
     }
 }
