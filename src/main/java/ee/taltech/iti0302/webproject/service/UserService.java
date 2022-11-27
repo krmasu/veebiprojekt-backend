@@ -26,8 +26,6 @@ public class UserService {
 
     public LoginUserDto getUserData(UserDto request) {
         Integer id = request.getId();
-
-
         Optional<AppUser> optionalUser = userRepository.findById(id);
         AppUser user = optionalUser.orElseThrow(() -> new InvalidCredentialsException(InvalidCredentialsException.Reason.ID));
 
