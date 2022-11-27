@@ -9,4 +9,5 @@ public class LoginResponseDto {
     private String authToken;
     private String email;
     private List<ProjectDto> projects;
+    private Integer id;
 }
