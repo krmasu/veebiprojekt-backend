@@ -13,7 +13,7 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping("api/project/{projectId}")
-    public ProjectDto getEmployeeById(@PathVariable("projectId") Integer projectId) {
+    public ProjectDto getProjectById(@PathVariable("projectId") Integer projectId) {
         return projectService.findById(projectId);
     }
 }

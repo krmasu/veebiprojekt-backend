@@ -1,28 +1,29 @@
 package ee.taltech.iti0302.webproject.service;
 
-import ee.taltech.iti0302.webproject.dto.AuthenticateUserDto;
-import ee.taltech.iti0302.webproject.dto.LoginUserDto;
+import ee.taltech.iti0302.webproject.dto.LoginRequestDto;
+import ee.taltech.iti0302.webproject.dto.LoginResponseDto;
 import ee.taltech.iti0302.webproject.dto.ProjectDto;
 import ee.taltech.iti0302.webproject.dto.RegisterUserDto;
 import ee.taltech.iti0302.webproject.entity.AppUser;
 import ee.taltech.iti0302.webproject.entity.Project;
-import ee.taltech.iti0302.webproject.exception.ApplicationException;
 import ee.taltech.iti0302.webproject.exception.InvalidCredentialsException;
 import ee.taltech.iti0302.webproject.exception.UserExistsException;
 import ee.taltech.iti0302.webproject.repository.UserRepository;
 import ee.taltech.iti0302.webproject.service.mapper.ProjectMapper;
 import ee.taltech.iti0302.webproject.service.mapper.UserMapper;
-import ee.taltech.iti0302.webproject.tools.RandomString;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.security.Key;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -32,6 +33,9 @@ public class AuthenticateUserService {
     private final UserRepository userRepository;
     private final ProjectMapper projectMapper;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+
+    private static final long TWELVE_HOURS_AS_MILLI = 43200000;
 
     public void registerUser(RegisterUserDto request) {
         String requestUsername = request.getUsername().toLowerCase();
@@ -45,60 +49,32 @@ public class AuthenticateUserService {
         if (emailExists) {
             throw new UserExistsException(UserExistsException.Reason.EMAIL);
         }
+        AppUser user = userMapper.toEntity(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        AppUser user = new AppUser();
-        user.setUsername(requestUsername);
-        user.setEmail(requestEmail);
-
-        RandomString generator = new RandomString(32);
-        String salt = generator.nextString();
-        String password;
-
-        try {
-            password = toHexString(hashPassword(request.getPassword() + salt));
-        } catch (NoSuchAlgorithmException e) {
-            throw new ApplicationException("Hash algorithm not found");
-        }
-
-        user.setPasswordSalt(salt);
-        user.setPasswordHash(password);
         userRepository.save(user);
     }
 
-    public byte[] hashPassword(String input) throws NoSuchAlgorithmException {
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-        return messageDigest.digest(input.getBytes(StandardCharsets.UTF_8));
-    }
-
-    public String toHexString(byte[] hash) {
-        BigInteger number = new BigInteger(1, hash);
-
-        StringBuilder hexString = new StringBuilder(number.toString(16));
-
-        while (hexString.length() < 64) {
-            hexString.insert(0, "0");
-        }
-        return hexString.toString();
-    }
-
-    public LoginUserDto loginUser(AuthenticateUserDto request) {
+    public LoginResponseDto loginUser(LoginRequestDto request) {
         Optional<AppUser> optionalUser = userRepository.findByUsernameIgnoreCase(request.getUsername());
         AppUser user = optionalUser.orElseThrow(() -> new InvalidCredentialsException(InvalidCredentialsException.Reason.USERNAME));
 
-        String hashedPassword = user.getPasswordHash();
-        String salt = user.getPasswordSalt();
-        String hashedInput;
-
-        try {
-            hashedInput = toHexString(hashPassword(request.getPassword() + salt));
-        } catch (NoSuchAlgorithmException e) {
-            throw new ApplicationException("Hash algorithm not found");
-        }
-
-        if (Objects.equals(hashedPassword, hashedInput)) {
+        if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("username", user.getUsername());
+            long issuedAt = System.currentTimeMillis();
+            byte[] keyBites = Decoders.BASE64.decode("OERweXEyQ1B1cmJaNW9taklBR0xrSnVKMGFmbG9wTXNJUjBiQkZrdQ==");
+            Key key = Keys.hmacShaKeyFor(keyBites);
+            String authToken = Jwts.builder()
+                    .setSubject(user.getId().toString())
+                    .addClaims(claims)
+                    .setIssuedAt(new Date(issuedAt))
+                    .setExpiration(new Date(issuedAt + TWELVE_HOURS_AS_MILLI))
+                    .signWith(key)
+                    .compact();
             List<Project> projects = user.getProjects();
             List<ProjectDto> projectDtoList = projectMapper.toDtoList(projects);
-            return userMapper.toDto(user, projectDtoList);
+            return userMapper.toLoginResponseDto(authToken, user.getEmail(), projectDtoList);
         } else {
             throw new InvalidCredentialsException(InvalidCredentialsException.Reason.PASSWORD);
         }
