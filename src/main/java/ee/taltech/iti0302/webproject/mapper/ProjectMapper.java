@@ -1,4 +1,4 @@
-package ee.taltech.iti0302.webproject.service.mapper;
+package ee.taltech.iti0302.webproject.mapper;
 
 import ee.taltech.iti0302.webproject.dto.ProjectDto;
 import ee.taltech.iti0302.webproject.entity.Project;

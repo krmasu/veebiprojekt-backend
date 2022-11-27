@@ -222,4 +222,10 @@
         <addForeignKeyConstraint baseTableName="user_projects" baseColumnNames="user_id" constraintName="user_projects_user_id_fk" referencedTableName="app_user"
                                  referencedColumnNames="id"/>
     </changeSet>
+    <changeSet id="2022-11-26 drop password_salt column from app_user" author="andreas">
+        <dropColumn tableName="app_user" columnName="password_salt"/>
+    </changeSet>
+    <changeSet id="2022-11-26 rename column password_hash in app_user to password" author="andreas">
+        <renameColumn tableName="app_user" oldColumnName="password_hash" newColumnName="password"/>
+    </changeSet>
 </databaseChangeLog>

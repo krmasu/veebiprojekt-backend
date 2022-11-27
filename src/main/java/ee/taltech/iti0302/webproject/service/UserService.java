@@ -5,10 +5,10 @@ import ee.taltech.iti0302.webproject.dto.ProjectDto;
 import ee.taltech.iti0302.webproject.dto.UserDto;
 import ee.taltech.iti0302.webproject.entity.AppUser;
 import ee.taltech.iti0302.webproject.entity.Project;
-import ee.taltech.iti0302.webproject.exception.ResourceNotFoundException;
+import ee.taltech.iti0302.webproject.exception.InvalidCredentialsException;
 import ee.taltech.iti0302.webproject.repository.UserRepository;
-import ee.taltech.iti0302.webproject.service.mapper.ProjectMapper;
-import ee.taltech.iti0302.webproject.service.mapper.UserMapper;
+import ee.taltech.iti0302.webproject.mapper.ProjectMapper;
+import ee.taltech.iti0302.webproject.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +32,7 @@ public class UserService {
 
         List<Project> projects = user.getProjects();
         List<ProjectDto> projectDtoList = projectMapper.toDtoList(projects);
-        return userMapper.toDto(user, projectDtoList);
+        return userMapper.toLoginUserDto(user, projectDtoList);
     }
 
 }

@@ -1,4 +1,4 @@
-package ee.taltech.iti0302.webproject;
+package ee.taltech.iti0302.webproject.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
