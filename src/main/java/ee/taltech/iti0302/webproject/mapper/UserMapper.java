@@ -1,4 +1,4 @@
-package ee.taltech.iti0302.webproject.service.mapper;
+package ee.taltech.iti0302.webproject.mapper;
 
 import ee.taltech.iti0302.webproject.dto.LoginResponseDto;
 import ee.taltech.iti0302.webproject.dto.LoginUserDto;

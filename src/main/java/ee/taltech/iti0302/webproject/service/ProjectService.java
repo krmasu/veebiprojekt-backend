@@ -4,7 +4,7 @@ import ee.taltech.iti0302.webproject.dto.ProjectDto;
 import ee.taltech.iti0302.webproject.entity.Project;
 import ee.taltech.iti0302.webproject.exception.ResourceNotFoundException;
 import ee.taltech.iti0302.webproject.repository.ProjectRepository;
-import ee.taltech.iti0302.webproject.service.mapper.ProjectMapper;
+import ee.taltech.iti0302.webproject.mapper.ProjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
