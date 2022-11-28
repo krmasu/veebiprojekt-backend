@@ -1,6 +1,7 @@
 package ee.taltech.iti0302.webproject.service;
 
 import ee.taltech.iti0302.webproject.dto.CreateProjectDto;
+import ee.taltech.iti0302.webproject.dto.DeleteProjectDto;
 import ee.taltech.iti0302.webproject.dto.ProjectDto;
 import ee.taltech.iti0302.webproject.entity.AppUser;
 import ee.taltech.iti0302.webproject.entity.Project;
@@ -39,6 +40,15 @@ public class ProjectService {
         Project savedProject = projectRepository.save(project);
         user.getProjects().add(savedProject);
 
+        return projectMapper.toDtoList(user.getProjects());
+    }
+
+    public List<ProjectDto> deleteById(DeleteProjectDto deleteProjectDto) {
+        AppUser user = userRepository.findById(deleteProjectDto.getOwnerId()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        Project project = projectRepository.findById(deleteProjectDto.getProjectId()).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+
+        user.getProjects().remove(project);
+        projectRepository.deleteById(deleteProjectDto.getProjectId());
         return projectMapper.toDtoList(user.getProjects());
     }
 }
