@@ -35,7 +35,7 @@ public class ProjectService {
         project.setTitle(createProjectDto.getTitle());
 
         Integer userId = createProjectDto.getOwnerId();
-        AppUser user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        AppUser user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found when trying to create new project"));
 
         Project savedProject = projectRepository.save(project);
         user.getProjects().add(savedProject);
@@ -44,8 +44,8 @@ public class ProjectService {
     }
 
     public List<ProjectDto> deleteById(DeleteProjectDto deleteProjectDto) {
-        AppUser user = userRepository.findById(deleteProjectDto.getOwnerId()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        Project project = projectRepository.findById(deleteProjectDto.getProjectId()).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+        AppUser user = userRepository.findById(deleteProjectDto.getOwnerId()).orElseThrow(() -> new ResourceNotFoundException("User not found when trying to delete project"));
+        Project project = projectRepository.findById(deleteProjectDto.getProjectId()).orElseThrow(() -> new ResourceNotFoundException("Project to delete not found"));
 
         user.getProjects().remove(project);
         projectRepository.deleteById(deleteProjectDto.getProjectId());
