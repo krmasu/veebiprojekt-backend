@@ -37,7 +37,7 @@ public class AuthenticateUserService {
 
     private static final long TWELVE_HOURS_AS_MILLI = 43200000;
 
-    public void registerUser(RegisterUserDto request) {
+    public Integer registerUser(RegisterUserDto request) {
         String requestUsername = request.getUsername().toLowerCase();
         String requestEmail = request.getEmail().toLowerCase();
 
@@ -52,7 +52,8 @@ public class AuthenticateUserService {
         AppUser user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        userRepository.save(user);
+        AppUser savedUser = userRepository.save(user);
+        return savedUser.getId();
     }
 
     public LoginResponseDto loginUser(LoginRequestDto request) {
