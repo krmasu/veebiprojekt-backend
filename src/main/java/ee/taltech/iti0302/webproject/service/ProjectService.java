@@ -26,7 +26,7 @@ public class ProjectService {
 
     public ProjectDto findById(Integer projectId) {
         Optional<Project> projectOptional = projectRepository.findById(projectId);
-        Project project = projectOptional.orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+        Project project = projectOptional.orElseThrow(() -> new ResourceNotFoundException("Project to get not found"));
         return projectMapper.toDto(project);
     }
 
