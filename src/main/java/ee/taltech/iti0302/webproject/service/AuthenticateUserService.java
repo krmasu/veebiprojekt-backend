@@ -15,6 +15,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +56,6 @@ public class AuthenticateUserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         AppUser savedUser = userRepository.save(user);
-        log.info("Registered user with id: {}", savedUser.getId());
         return savedUser.getId();
     }
 
