@@ -3,6 +3,7 @@ package ee.taltech.iti0302.webproject.service;
 import ee.taltech.iti0302.webproject.dto.CreateProjectDto;
 import ee.taltech.iti0302.webproject.dto.DeleteProjectDto;
 import ee.taltech.iti0302.webproject.dto.ProjectDto;
+import ee.taltech.iti0302.webproject.dto.UpdateProjectDto;
 import ee.taltech.iti0302.webproject.entity.AppUser;
 import ee.taltech.iti0302.webproject.entity.Project;
 import ee.taltech.iti0302.webproject.exception.ResourceNotFoundException;
@@ -50,5 +51,12 @@ public class ProjectService {
         user.getProjects().remove(project);
         projectRepository.deleteById(deleteProjectDto.getProjectId());
         return projectMapper.toDtoList(user.getProjects());
+    }
+
+    public ProjectDto updateProject(UpdateProjectDto updateProjectDto) {
+        Project project = projectRepository.findById(updateProjectDto.getProjectId()).orElseThrow(() -> new ResourceNotFoundException("Project to update not found"));
+        projectMapper.updateProjectFromDto(updateProjectDto, project);
+        projectRepository.save(project);
+        return projectMapper.toDto(project);
     }
 }

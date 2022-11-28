@@ -1,9 +1,9 @@
 package ee.taltech.iti0302.webproject.service;
 
-import ee.taltech.iti0302.webproject.dto.LoginRequestDto;
-import ee.taltech.iti0302.webproject.dto.LoginResponseDto;
+import ee.taltech.iti0302.webproject.dto.authentication.LoginRequestDto;
+import ee.taltech.iti0302.webproject.dto.authentication.LoginResponseDto;
 import ee.taltech.iti0302.webproject.dto.ProjectDto;
-import ee.taltech.iti0302.webproject.dto.RegisterUserDto;
+import ee.taltech.iti0302.webproject.dto.authentication.RegisterUserDto;
 import ee.taltech.iti0302.webproject.entity.AppUser;
 import ee.taltech.iti0302.webproject.entity.Project;
 import ee.taltech.iti0302.webproject.exception.InvalidCredentialsException;

@@ -1,9 +1,9 @@
 package ee.taltech.iti0302.webproject.mapper;
 
-import ee.taltech.iti0302.webproject.dto.LoginResponseDto;
-import ee.taltech.iti0302.webproject.dto.LoginUserDto;
+import ee.taltech.iti0302.webproject.dto.authentication.LoginResponseDto;
+import ee.taltech.iti0302.webproject.dto.authentication.LoginUserDto;
 import ee.taltech.iti0302.webproject.dto.ProjectDto;
-import ee.taltech.iti0302.webproject.dto.RegisterUserDto;
+import ee.taltech.iti0302.webproject.dto.authentication.RegisterUserDto;
 import ee.taltech.iti0302.webproject.entity.AppUser;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

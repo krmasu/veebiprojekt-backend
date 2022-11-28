@@ -1,4 +1,4 @@
-package ee.taltech.iti0302.webproject.dto;
+package ee.taltech.iti0302.webproject.dto.authentication;
 
 import lombok.Data;
 
