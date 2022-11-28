@@ -1,6 +1,6 @@
 package ee.taltech.iti0302.webproject.controller;
 
-import ee.taltech.iti0302.webproject.dto.LoginUserDto;
+import ee.taltech.iti0302.webproject.dto.authentication.LoginUserDto;
 import ee.taltech.iti0302.webproject.dto.UserDto;
 import ee.taltech.iti0302.webproject.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("api/user")
-    public LoginUserDto registerUser(@RequestBody UserDto request) {
+    public LoginUserDto getUserData(@RequestBody UserDto request) {
         return userService.getUserData(request);
     }
 }

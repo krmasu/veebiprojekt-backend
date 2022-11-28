@@ -1,9 +1,9 @@
 package ee.taltech.iti0302.webproject.service;
 
-import ee.taltech.iti0302.webproject.dto.LoginRequestDto;
-import ee.taltech.iti0302.webproject.dto.LoginResponseDto;
+import ee.taltech.iti0302.webproject.dto.authentication.LoginRequestDto;
+import ee.taltech.iti0302.webproject.dto.authentication.LoginResponseDto;
 import ee.taltech.iti0302.webproject.dto.ProjectDto;
-import ee.taltech.iti0302.webproject.dto.RegisterUserDto;
+import ee.taltech.iti0302.webproject.dto.authentication.RegisterUserDto;
 import ee.taltech.iti0302.webproject.entity.AppUser;
 import ee.taltech.iti0302.webproject.entity.Project;
 import ee.taltech.iti0302.webproject.exception.InvalidCredentialsException;
@@ -15,8 +15,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +38,7 @@ public class AuthenticateUserService {
 
     private static final long TWELVE_HOURS_AS_MILLI = 43200000;
 
-    public void registerUser(RegisterUserDto request) {
+    public Integer registerUser(RegisterUserDto request) {
         String requestUsername = request.getUsername().toLowerCase();
         String requestEmail = request.getEmail().toLowerCase();
 
@@ -57,6 +55,7 @@ public class AuthenticateUserService {
 
         AppUser savedUser = userRepository.save(user);
         log.info("Registered user with id: {}", savedUser.getId());
+        return savedUser.getId();
     }
 
     public LoginResponseDto loginUser(LoginRequestDto request) {
@@ -79,7 +78,7 @@ public class AuthenticateUserService {
             List<Project> projects = user.getProjects();
             List<ProjectDto> projectDtoList = projectMapper.toDtoList(projects);
             log.info("Logged in user with id: {}", user.getId());
-            return userMapper.toLoginResponseDto(authToken, user.getEmail(), projectDtoList);
+            return userMapper.toLoginResponseDto(authToken, user.getEmail(), projectDtoList, user.getId());
         } else {
             throw new InvalidCredentialsException(InvalidCredentialsException.Reason.PASSWORD);
         }
