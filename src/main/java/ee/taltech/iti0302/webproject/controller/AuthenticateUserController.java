@@ -1,8 +1,8 @@
 package ee.taltech.iti0302.webproject.controller;
 
-import ee.taltech.iti0302.webproject.dto.LoginRequestDto;
-import ee.taltech.iti0302.webproject.dto.LoginResponseDto;
-import ee.taltech.iti0302.webproject.dto.RegisterUserDto;
+import ee.taltech.iti0302.webproject.dto.authentication.LoginRequestDto;
+import ee.taltech.iti0302.webproject.dto.authentication.LoginResponseDto;
+import ee.taltech.iti0302.webproject.dto.authentication.RegisterUserDto;
 import ee.taltech.iti0302.webproject.dto.UserCreatedDto;
 import ee.taltech.iti0302.webproject.service.AuthenticateUserService;
 import lombok.RequiredArgsConstructor;

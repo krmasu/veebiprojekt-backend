@@ -1,11 +1,10 @@
 package ee.taltech.iti0302.webproject.service;
 
-import ee.taltech.iti0302.webproject.dto.LoginUserDto;
+import ee.taltech.iti0302.webproject.dto.authentication.LoginUserDto;
 import ee.taltech.iti0302.webproject.dto.ProjectDto;
 import ee.taltech.iti0302.webproject.dto.UserDto;
 import ee.taltech.iti0302.webproject.entity.AppUser;
 import ee.taltech.iti0302.webproject.entity.Project;
-import ee.taltech.iti0302.webproject.exception.InvalidCredentialsException;
 import ee.taltech.iti0302.webproject.exception.ResourceNotFoundException;
 import ee.taltech.iti0302.webproject.repository.UserRepository;
 import ee.taltech.iti0302.webproject.mapper.ProjectMapper;
