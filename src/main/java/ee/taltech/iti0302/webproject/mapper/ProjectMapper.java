@@ -1,7 +1,7 @@
 package ee.taltech.iti0302.webproject.mapper;
 
-import ee.taltech.iti0302.webproject.dto.ProjectDto;
-import ee.taltech.iti0302.webproject.dto.UpdateProjectDto;
+import ee.taltech.iti0302.webproject.dto.project.ProjectDto;
+import ee.taltech.iti0302.webproject.dto.project.UpdateProjectDto;
 import ee.taltech.iti0302.webproject.entity.Project;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

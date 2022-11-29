@@ -1,9 +1,9 @@
 package ee.taltech.iti0302.webproject.controller;
 
-import ee.taltech.iti0302.webproject.dto.CreateProjectDto;
-import ee.taltech.iti0302.webproject.dto.DeleteProjectDto;
-import ee.taltech.iti0302.webproject.dto.ProjectDto;
-import ee.taltech.iti0302.webproject.dto.UpdateProjectDto;
+import ee.taltech.iti0302.webproject.dto.project.CreateProjectDto;
+import ee.taltech.iti0302.webproject.dto.project.DeleteProjectDto;
+import ee.taltech.iti0302.webproject.dto.project.ProjectDto;
+import ee.taltech.iti0302.webproject.dto.project.UpdateProjectDto;
 import ee.taltech.iti0302.webproject.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
