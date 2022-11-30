@@ -78,13 +78,13 @@ public class TaskService {
         return tasksToTaskDtos(tasks);
     }
 
-    public PaginatedTaskDto getTasks(Integer projectId, Pageable pageable, String title, String assigneeName, String statusId, String milestone) {
+    public PaginatedTaskDto getTasks(Integer projectId, Pageable pageable, String title, String assigneeName, Integer statusId, Integer milestoneId) {
         Specification<Task> specification = Specification
                 .where(TaskSpecification.byProject(projectId))
                 .and(title == null ? null : TaskSpecification.titleContains(title))
                 .and(assigneeName == null ? null : TaskSpecification.assigneeContains(assigneeName))
-                .and(statusId == null ? null : TaskSpecification.byStatus(Integer.parseInt(statusId)))
-                .and(milestone == null ? null : TaskSpecification.byMilestone(Integer.parseInt(milestone)));
+                .and(statusId == null ? null : TaskSpecification.byStatus(statusId))
+                .and(milestoneId == null ? null : TaskSpecification.byMilestone(milestoneId));
         Page<Task> tasks = taskRepository.findAll(specification, pageable);
         return taskMapper.toPaginatedDto(tasks.getTotalPages(), pageable.getPageNumber(), pageable.getPageSize(), tasksToTaskDtos(tasks.getContent()));
     }
@@ -96,5 +96,12 @@ public class TaskService {
             dtos.add(dto1);
         }
         return dtos;
+    }
+
+    public PaginatedTaskDto deleteTask(Integer taskId) {
+        taskRepository.deleteById(taskId);
+        Pageable pageable = Pageable.ofSize(10);
+        Page<Task> tasks = taskRepository.findAll(pageable);
+        return taskMapper.toPaginatedDto(tasks.getTotalPages(), 0, 10, tasksToTaskDtos(tasks.getContent()));
     }
 }

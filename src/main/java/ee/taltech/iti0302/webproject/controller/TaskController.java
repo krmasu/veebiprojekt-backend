@@ -7,6 +7,7 @@ import ee.taltech.iti0302.webproject.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,11 +36,17 @@ public class TaskController {
     public PaginatedTaskDto getTasks(@PathVariable("projectId") Integer projectId,
                                      @RequestParam(name = "title", required = false) String title,
                                      @RequestParam(name = "assignee", required = false) String assigneeName,
-                                     @RequestParam(name = "status", required = false) String statusId,
-                                     @RequestParam(name = "milestone", required = false) String milestone,
+                                     @RequestParam(name = "status", required = false) Integer statusId,
+                                     @RequestParam(name = "milestone", required = false) Integer milestone,
                                      Principal principal, Pageable pageable) {
         log.info("Getting tasks from project with id: {} for user with id: {}", projectId, principal.getName());
         return taskService.getTasks(projectId, pageable, title, assigneeName, statusId, milestone);
+    }
+
+    @DeleteMapping("api/project/task/{taskId}")
+    public PaginatedTaskDto deleteTask(@PathVariable("taskId") Integer taskId) {
+        log.info("Deleting task with id: {}", taskId);
+        return taskService.deleteTask(taskId);
     }
 
 }
