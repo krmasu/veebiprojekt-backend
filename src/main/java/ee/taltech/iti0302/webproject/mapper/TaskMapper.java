@@ -1,5 +1,6 @@
 package ee.taltech.iti0302.webproject.mapper;
 
+import ee.taltech.iti0302.webproject.dto.PaginatedTaskDto;
 import ee.taltech.iti0302.webproject.dto.task.CreateTaskDto;
 import ee.taltech.iti0302.webproject.dto.label.LabelDto;
 import ee.taltech.iti0302.webproject.dto.task.TaskDto;
@@ -24,4 +25,5 @@ public interface TaskMapper {
     TaskDto toDto(Task task, List<LabelDto> labels);
 
     List<TaskDto> toDtoList(List<Task> tasks);
+    PaginatedTaskDto toPaginatedDto(Integer totalPages, Integer page, Integer size, List<TaskDto> tasks);
 }
