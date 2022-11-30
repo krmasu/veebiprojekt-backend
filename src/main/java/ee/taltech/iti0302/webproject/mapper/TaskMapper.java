@@ -1,13 +1,15 @@
 package ee.taltech.iti0302.webproject.mapper;
 
-import ee.taltech.iti0302.webproject.dto.PaginatedTaskDto;
+import ee.taltech.iti0302.webproject.dto.task.PaginatedTaskDto;
 import ee.taltech.iti0302.webproject.dto.task.CreateTaskDto;
 import ee.taltech.iti0302.webproject.dto.label.LabelDto;
 import ee.taltech.iti0302.webproject.dto.task.TaskDto;
+import ee.taltech.iti0302.webproject.dto.task.UpdateTaskDto;
 import ee.taltech.iti0302.webproject.entity.Task;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
@@ -26,4 +28,6 @@ public interface TaskMapper {
 
     List<TaskDto> toDtoList(List<Task> tasks);
     PaginatedTaskDto toPaginatedDto(Integer totalPages, Integer page, Integer size, List<TaskDto> tasks);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateTaskFromDto(UpdateTaskDto dto, @MappingTarget Task task);
 }

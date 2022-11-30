@@ -1,8 +1,9 @@
 package ee.taltech.iti0302.webproject.service;
 
-import ee.taltech.iti0302.webproject.dto.PaginatedTaskDto;
+import ee.taltech.iti0302.webproject.dto.task.PaginatedTaskDto;
 import ee.taltech.iti0302.webproject.dto.task.CreateTaskDto;
 import ee.taltech.iti0302.webproject.dto.task.TaskDto;
+import ee.taltech.iti0302.webproject.dto.task.UpdateTaskDto;
 import ee.taltech.iti0302.webproject.entity.AppUser;
 import ee.taltech.iti0302.webproject.entity.Label;
 import ee.taltech.iti0302.webproject.entity.Milestone;
@@ -43,7 +44,7 @@ public class TaskService {
     private final StatusRepository statusRepository;
     private final LabelRepository labelRepository;
     private final LabelMapper labelMapper;
-    public List<TaskDto> createTask(CreateTaskDto dto) {
+    public PaginatedTaskDto createTask(CreateTaskDto dto, Pageable pageable) {
         Task task = taskMapper.toEntity(dto);
 
         Project project = projectRepository.findById(dto.getProjectId()).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
@@ -74,8 +75,8 @@ public class TaskService {
 
         taskRepository.save(task);
 
-        List<Task> tasks = project.getTasks();
-        return tasksToTaskDtos(tasks);
+        Page<Task> tasks = taskRepository.findAllByProjectId(project.getId(), pageable);
+        return taskMapper.toPaginatedDto(tasks.getTotalPages(), pageable.getPageNumber(), pageable.getPageSize(), tasksToTaskDtos(tasks.getContent()));
     }
 
     public PaginatedTaskDto getTasks(Integer projectId, Pageable pageable, String title, String assigneeName, Integer statusId, Integer milestoneId) {
@@ -98,10 +99,32 @@ public class TaskService {
         return dtos;
     }
 
-    public PaginatedTaskDto deleteTask(Integer taskId) {
+    public PaginatedTaskDto deleteTask(Integer projectId, Integer taskId, Pageable pageable) {
         taskRepository.deleteById(taskId);
-        Pageable pageable = Pageable.ofSize(10);
-        Page<Task> tasks = taskRepository.findAll(pageable);
-        return taskMapper.toPaginatedDto(tasks.getTotalPages(), 0, 10, tasksToTaskDtos(tasks.getContent()));
+        Page<Task> tasks = taskRepository.findAllByProjectId(projectId, pageable);
+        return taskMapper.toPaginatedDto(tasks.getTotalPages(), pageable.getPageNumber(), pageable.getPageSize(), tasksToTaskDtos(tasks.getContent()));
+    }
+
+    public PaginatedTaskDto updateTask(Integer projectId, UpdateTaskDto dto, Pageable pageable, Integer taskId) {
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new ResourceNotFoundException("Task to update not found"));
+        taskMapper.updateTaskFromDto(dto, task);
+        Integer assigneeId = dto.getAssigneeId();
+        if (assigneeId != null) {
+            task.setAssignee(userRepository.findById(dto.getAssigneeId()).orElseThrow(() -> new ResourceNotFoundException("User not found")));
+        }
+        Integer statusId = dto.getStatusId();
+        if (statusId != null) {
+            task.setStatus(statusRepository.findById(dto.getStatusId()).orElseThrow(() -> new ResourceNotFoundException("Status not found")));
+        }
+        List<Integer> labelIds = dto.getLabelIds();
+        if (labelIds != null && !labelIds.isEmpty()) {
+            task.setLabels(labelRepository.findAllById(dto.getLabelIds()));
+        }
+        Integer milestoneId = dto.getMilestoneId();
+        if (milestoneId != null) {
+            task.setMilestone(milestoneRepository.findById(dto.getMilestoneId()).orElseThrow(() -> new ResourceNotFoundException("Milestone not found")));
+        }
+        Page<Task> tasks = taskRepository.findAllByProjectId(projectId, pageable);
+        return taskMapper.toPaginatedDto(tasks.getTotalPages(), pageable.getPageNumber(), pageable.getPageSize(), tasksToTaskDtos(tasks.getContent()));
     }
 }
