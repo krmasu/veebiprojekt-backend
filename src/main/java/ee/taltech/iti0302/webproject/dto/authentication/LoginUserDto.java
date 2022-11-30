@@ -1,6 +1,6 @@
 package ee.taltech.iti0302.webproject.dto.authentication;
 
-import ee.taltech.iti0302.webproject.dto.ProjectDto;
+import ee.taltech.iti0302.webproject.dto.project.ProjectDto;
 import lombok.Data;
 
 import java.util.List;
