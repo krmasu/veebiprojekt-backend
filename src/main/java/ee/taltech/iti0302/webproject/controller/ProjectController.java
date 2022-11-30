@@ -1,9 +1,11 @@
 package ee.taltech.iti0302.webproject.controller;
 
+import ee.taltech.iti0302.webproject.dto.AddMembersToProjectDto;
 import ee.taltech.iti0302.webproject.dto.CreateProjectDto;
 import ee.taltech.iti0302.webproject.dto.DeleteProjectDto;
 import ee.taltech.iti0302.webproject.dto.ProjectDto;
 import ee.taltech.iti0302.webproject.dto.UpdateProjectDto;
+import ee.taltech.iti0302.webproject.dto.UserResponseDto;
 import ee.taltech.iti0302.webproject.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -51,4 +53,15 @@ public class ProjectController {
         return projectService.deleteById(deleteProjectDto);
     }
 
+    @GetMapping("api/project/{projectId}/member")
+    public List<UserResponseDto> getProjectMembers(@PathVariable("projectId") Integer projectId, Principal principal) {
+        log.info("Getting members for project with id: {} for user with id: {}", projectId, principal.getName());
+        return projectService.getProjectMembers(projectId);
+    }
+
+    @PostMapping("api/project/{projectId}/member")
+    public List<UserResponseDto> addNewProjectMembers(@PathVariable("projectId") Integer projectId, @RequestBody AddMembersToProjectDto dto) {
+        log.info("Adding new members to project with id: {}", dto);
+        return projectService.addNewProjectMembers(projectId, dto);
+    }
 }
