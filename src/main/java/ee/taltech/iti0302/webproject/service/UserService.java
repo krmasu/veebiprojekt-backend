@@ -1,10 +1,8 @@
 package ee.taltech.iti0302.webproject.service;
 
 import ee.taltech.iti0302.webproject.dto.authentication.LoginUserDto;
-import ee.taltech.iti0302.webproject.dto.ProjectDto;
-import ee.taltech.iti0302.webproject.dto.UserRequestDto;
 import ee.taltech.iti0302.webproject.dto.project.ProjectDto;
-import ee.taltech.iti0302.webproject.dto.user.UserDto;
+import ee.taltech.iti0302.webproject.dto.user.UserRequestDto;
 import ee.taltech.iti0302.webproject.entity.AppUser;
 import ee.taltech.iti0302.webproject.entity.Project;
 import ee.taltech.iti0302.webproject.exception.ResourceNotFoundException;

@@ -1,11 +1,11 @@
 package ee.taltech.iti0302.webproject.service;
 
-import ee.taltech.iti0302.webproject.dto.AddMembersToProjectDto;
+import ee.taltech.iti0302.webproject.dto.project.AddMembersToProjectDto;
 import ee.taltech.iti0302.webproject.dto.CreateProjectDto;
 import ee.taltech.iti0302.webproject.dto.DeleteProjectDto;
 import ee.taltech.iti0302.webproject.dto.ProjectDto;
 import ee.taltech.iti0302.webproject.dto.UpdateProjectDto;
-import ee.taltech.iti0302.webproject.dto.UserResponseDto;
+import ee.taltech.iti0302.webproject.dto.user.UserResponseDto;
 import ee.taltech.iti0302.webproject.dto.project.CreateProjectDto;
 import ee.taltech.iti0302.webproject.dto.project.DeleteProjectDto;
 import ee.taltech.iti0302.webproject.dto.project.ProjectDto;

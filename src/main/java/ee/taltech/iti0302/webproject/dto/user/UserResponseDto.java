@@ -1,4 +1,4 @@
-package ee.taltech.iti0302.webproject.dto;
+package ee.taltech.iti0302.webproject.dto.user;
 
 import lombok.Data;
 

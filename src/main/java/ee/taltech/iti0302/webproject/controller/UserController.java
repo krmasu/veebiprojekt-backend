@@ -1,7 +1,7 @@
 package ee.taltech.iti0302.webproject.controller;
 
 import ee.taltech.iti0302.webproject.dto.authentication.LoginUserDto;
-import ee.taltech.iti0302.webproject.dto.UserRequestDto;
+import ee.taltech.iti0302.webproject.dto.user.UserRequestDto;
 import ee.taltech.iti0302.webproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

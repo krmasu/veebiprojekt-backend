@@ -1,6 +1,6 @@
 package ee.taltech.iti0302.webproject.mapper;
 
-import ee.taltech.iti0302.webproject.dto.UserResponseDto;
+import ee.taltech.iti0302.webproject.dto.user.UserResponseDto;
 import ee.taltech.iti0302.webproject.dto.authentication.LoginResponseDto;
 import ee.taltech.iti0302.webproject.dto.authentication.LoginUserDto;
 import ee.taltech.iti0302.webproject.dto.project.ProjectDto;
