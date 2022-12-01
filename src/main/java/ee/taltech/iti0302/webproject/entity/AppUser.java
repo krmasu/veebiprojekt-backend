@@ -1,13 +1,15 @@
 package ee.taltech.iti0302.webproject.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Getter @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
