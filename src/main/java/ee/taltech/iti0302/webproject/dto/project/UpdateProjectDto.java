@@ -1,10 +1,8 @@
 package ee.taltech.iti0302.webproject.dto.project;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 public class UpdateProjectDto {
     private Integer projectId;
     private String title;
