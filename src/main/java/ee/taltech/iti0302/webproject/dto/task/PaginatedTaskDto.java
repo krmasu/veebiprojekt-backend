@@ -1,6 +1,5 @@
-package ee.taltech.iti0302.webproject.dto;
+package ee.taltech.iti0302.webproject.dto.task;
 
-import ee.taltech.iti0302.webproject.dto.task.TaskDto;
 import lombok.Data;
 
 import java.util.List;
