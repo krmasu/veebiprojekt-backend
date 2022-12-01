@@ -228,4 +228,15 @@
     <changeSet id="2022-11-26 rename column password_hash in app_user to password" author="andreas">
         <renameColumn tableName="app_user" oldColumnName="password_hash" newColumnName="password"/>
     </changeSet>
+    <changeSet id="2022-11-26 insert status enums" author="andreas">
+        <insert tableName="status">
+            <column name="name" value="not started"/>
+        </insert>
+        <insert tableName="status">
+            <column name="name" value="started"/>
+        </insert>
+        <insert tableName="status">
+            <column name="name" value="finished"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
