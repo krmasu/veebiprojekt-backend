@@ -93,8 +93,7 @@ public class TaskService {
     public List<TaskDto> tasksToTaskDtos(List<Task> tasks) {
         List<TaskDto> dtos = new ArrayList<>();
         for (Task task1 : tasks) {
-            TaskDto dto1 = taskMapper.toDto(task1, labelMapper.toDtoList(task1.getLabels()));
-            dtos.add(dto1);
+            dtos.add(taskMapper.toDto(task1, labelMapper.toDtoList(task1.getLabels())));
         }
         return dtos;
     }
