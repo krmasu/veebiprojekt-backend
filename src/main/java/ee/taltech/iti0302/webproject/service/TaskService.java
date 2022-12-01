@@ -57,8 +57,7 @@ public class TaskService {
         }
 
         Integer statusId = dto.getStatusId();
-        Status status;
-        status = statusRepository.findById(Objects.requireNonNullElse(statusId, 1)).orElseThrow(() -> new ResourceNotFoundException("Status not found"));
+        Status status = statusRepository.findById(Objects.requireNonNullElse(statusId, 1)).orElseThrow(() -> new ResourceNotFoundException("Status not found"));
         task.setStatus(status);
 
         Integer milestoneId = dto.getMilestoneId();
