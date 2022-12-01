@@ -151,4 +151,92 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="2022-11-05 drop table milestone_tasks" author="andreas">
+        <dropTable tableName="milestone_tasks"/>
+    </changeSet>
+    <changeSet id="2022-11-05 drop table project_milestones" author="andreas">
+        <dropTable tableName="project_milestones"/>
+    </changeSet>
+    <changeSet id="2022-11-05 drop table project_tasks" author="andreas">
+        <dropTable tableName="project_tasks"/>
+    </changeSet>
+    <changeSet id="2022-11-05 drop table user_projects" author="andreas">
+        <dropTable tableName="user_projects"/>
+    </changeSet>
+    <changeSet id="2022-11-05 rename project_labels to label" author="andreas">
+        <renameTable oldTableName="project_labels" newTableName="label"/>
+    </changeSet>
+    <changeSet id="2022-11-05 create table task_labels" author="andreas">
+        <createTable tableName="task_labels">
+            <column autoIncrement="true" name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="task_labels_pk"/>
+            </column>
+            <column name="task_id" type="INTEGER">
+                <constraints nullable="false" references="task(id)" foreignKeyName="task_labels_task_id_fk"/>
+            </column>
+            <column name="label_id" type="INTEGER">
+                <constraints nullable="false" references="label(id)" foreignKeyName="task_labels_label_id_fk"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2022-11-05 drop column label_ids from task" author="andreas">
+        <dropColumn tableName="task" columnName="label_ids"/>
+    </changeSet>
+    <changeSet id="2022-11-05 create user projects table" author="andreas">
+        <createTable tableName="user_projects">
+            <column autoIncrement="true" name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_projects_pk"/>
+            </column>
+            <column name="user_id" type="INTEGER">
+                <constraints nullable="false" foreignKeyName="user_projects_user_id_fk" references="user(id)"/>
+            </column>
+            <column name="project_id" type="INTEGER">
+                <constraints nullable="false" foreignKeyName="user_projects_project_id_fk" references="project(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2022-11-06 add column password_hash to user table" author="andreas">
+        <addColumn tableName="user">
+            <column name="password_hash" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="2022-11-06 add column password_salt to user table" author="andreas">
+        <addColumn tableName="user">
+            <column name="password_salt" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="2022-11-07 rename user to app_user" author="andreas">
+        <renameTable oldTableName="user" newTableName="app_user"/>
+        <dropForeignKeyConstraint baseTableName="task" constraintName="task_assignee_id_fk"/>
+        <dropForeignKeyConstraint baseTableName="user_projects" constraintName="user_projects_user_id_fk"/>
+    </changeSet>
+    <changeSet id="2022-11-07 add task_assignee_id_fk" author="andreas">
+        <addForeignKeyConstraint baseTableName="task" baseColumnNames="assignee_id" constraintName="task_assignee_id_fk" referencedTableName="app_user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="2022-11-07 add user_projects_user_id_fk" author="andreas">
+        <addForeignKeyConstraint baseTableName="user_projects" baseColumnNames="user_id" constraintName="user_projects_user_id_fk" referencedTableName="app_user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="2022-11-26 drop password_salt column from app_user" author="andreas">
+        <dropColumn tableName="app_user" columnName="password_salt"/>
+    </changeSet>
+    <changeSet id="2022-11-26 rename column password_hash in app_user to password" author="andreas">
+        <renameColumn tableName="app_user" oldColumnName="password_hash" newColumnName="password"/>
+    </changeSet>
+    <changeSet id="2022-11-26 insert status enums" author="andreas">
+        <insert tableName="status">
+            <column name="name" value="not started"/>
+        </insert>
+        <insert tableName="status">
+            <column name="name" value="started"/>
+        </insert>
+        <insert tableName="status">
+            <column name="name" value="finished"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

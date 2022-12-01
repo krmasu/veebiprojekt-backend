@@ -1,4 +1,4 @@
-package ee.taltech.iti0302.webproject.entities;
+package ee.taltech.iti0302.webproject.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,13 +8,12 @@ import java.util.List;
 
 @Getter @Setter
 @Entity
-public class Role {
-
+public class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
 
-    @OneToMany(mappedBy = "role")
-    private List<Employee> employees;
+    @OneToMany(mappedBy = "status")
+    private List<Task> tasks;
 }
