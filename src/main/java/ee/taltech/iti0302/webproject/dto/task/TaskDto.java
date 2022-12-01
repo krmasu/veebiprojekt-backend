@@ -12,7 +12,8 @@ public class TaskDto {
     private String description;
     // yyyy-mm-dd
     private LocalDate deadline;
-
+    
+    private Integer id;
     private Integer projectId;
     private AssigneeDto assignee;
     private Integer statusId;
