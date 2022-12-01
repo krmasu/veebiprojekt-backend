@@ -1,7 +1,6 @@
 package ee.taltech.iti0302.webproject.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +14,9 @@ import java.util.List;
 
 @Getter @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Milestone {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
