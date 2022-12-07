@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class MilestoneController {
-    private MilestoneService milestoneService;
+    private final MilestoneService milestoneService;
     private static final Logger log = LoggerFactory.getLogger(MilestoneController.class);
 
     @GetMapping("api/project/{projectId}/milestone")
