@@ -1,5 +1,6 @@
 package ee.taltech.iti0302.webproject.service;
 
+import ee.taltech.iti0302.webproject.dto.UpdateMilestoneDto;
 import ee.taltech.iti0302.webproject.dto.milestone.CreateMilestoneDto;
 import ee.taltech.iti0302.webproject.dto.milestone.MilestoneDto;
 import ee.taltech.iti0302.webproject.dto.milestone.PaginatedMilestoneDto;
@@ -51,6 +52,21 @@ public class MilestoneService {
 
         milestoneRepository.save(milestone);
 
+        Page<Milestone> milestones = milestoneRepository.findAllByProjectId(projectId, pageable);
+        return milestoneMapper.toPaginatedDto(milestones.getTotalPages(), pageable.getPageNumber(), pageable.getPageSize(), milestonesToMilestoneDtos(milestones.getContent()));
+    }
+
+    public PaginatedMilestoneDto updateMilestone(Integer projectId, Integer milestoneId, UpdateMilestoneDto updateMilestoneDto, Pageable pageable) {
+        Milestone milestone = milestoneRepository.findById(milestoneId).orElseThrow(() -> new ResourceNotFoundException("Milestone to update not found"));
+
+        milestoneMapper.updateFromDto(updateMilestoneDto, milestone);
+
+        Page<Milestone> milestones = milestoneRepository.findAllByProjectId(projectId, pageable);
+        return milestoneMapper.toPaginatedDto(milestones.getTotalPages(), pageable.getPageNumber(), pageable.getPageSize(), milestonesToMilestoneDtos(milestones.getContent()));
+    }
+
+    public PaginatedMilestoneDto deleteMilestone(Integer projectId, Integer milestoneId, Pageable pageable) {
+        milestoneRepository.deleteById(milestoneId);
         Page<Milestone> milestones = milestoneRepository.findAllByProjectId(projectId, pageable);
         return milestoneMapper.toPaginatedDto(milestones.getTotalPages(), pageable.getPageNumber(), pageable.getPageSize(), milestonesToMilestoneDtos(milestones.getContent()));
     }

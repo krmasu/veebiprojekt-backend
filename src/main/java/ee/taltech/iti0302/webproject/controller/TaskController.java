@@ -27,7 +27,10 @@ public class TaskController {
     private static final Logger log = LoggerFactory.getLogger(TaskController.class);
 
     @PostMapping("api/project/{projectId}/task")
-    public PaginatedTaskDto createTask(@PathVariable("projectId") Integer projectId, @RequestBody CreateTaskDto dto, Principal principal, Pageable pageable) {
+    public PaginatedTaskDto createTask(@PathVariable("projectId") Integer projectId,
+                                       @RequestBody CreateTaskDto dto,
+                                       Principal principal,
+                                       Pageable pageable) {
         log.info("Creating task for project with id: {} for user with id: {}", projectId, principal.getName());
         return taskService.createTask(dto, pageable);
     }
@@ -43,17 +46,19 @@ public class TaskController {
         return taskService.getTasks(projectId, pageable, title, assigneeName, statusId, milestone);
     }
 
-    @DeleteMapping("api/project/{projectId}/{taskId}")
-    public PaginatedTaskDto deleteTask(@PathVariable("projectId") Integer projectId, @PathVariable("taskId") Integer taskId, Pageable pageable) {
+    @DeleteMapping("api/project/{projectId}/task/{taskId}")
+    public PaginatedTaskDto deleteTask(@PathVariable("projectId") Integer projectId,
+                                       @PathVariable("taskId") Integer taskId,
+                                       Pageable pageable) {
         log.info("Deleting task with id: {} from project with id: {}", taskId, projectId);
         return taskService.deleteTask(projectId, taskId, pageable);
     }
 
-    @PatchMapping("api/project/{projectId}/{taskId}")
+    @PatchMapping("api/project/{projectId}/task/{taskId}")
     public PaginatedTaskDto updateTask(@PathVariable("projectId") Integer projectId,
+                                       @PathVariable("taskId") Integer taskId,
                                        @RequestBody UpdateTaskDto dto,
-                                       Pageable pageable,
-                                       @PathVariable("taskId") Integer taskId) {
+                                       Pageable pageable) {
 
         log.info("Updating task with id: {} in project with id: {}", taskId, projectId);
         return taskService.updateTask(projectId, dto, pageable, taskId);

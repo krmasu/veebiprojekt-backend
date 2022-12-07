@@ -85,7 +85,7 @@ class TaskControllerTest {
         given(taskService.updateTask(1, updateTaskDto, pageable, 1)).willReturn(paginatedTaskDto);
 
         // When
-        var result  = taskController.updateTask(1, updateTaskDto, pageable, 1);
+        var result  = taskController.updateTask(1, 1, updateTaskDto, pageable);
 
         // Then
         then(taskService).should().updateTask(1, updateTaskDto, pageable, 1);
