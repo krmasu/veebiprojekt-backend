@@ -1,6 +1,6 @@
 package ee.taltech.iti0302.webproject.service;
 
-import ee.taltech.iti0302.webproject.dto.label.CreateLabelDto;
+import ee.taltech.iti0302.webproject.dto.label.UpdateLabelDto;
 import ee.taltech.iti0302.webproject.dto.label.LabelDto;
 import ee.taltech.iti0302.webproject.dto.label.PaginatedLabelDto;
 import ee.taltech.iti0302.webproject.entity.Label;
@@ -25,7 +25,7 @@ public class LabelService {
     private final LabelRepository labelRepository;
     private final LabelMapper labelMapper;
     private final ProjectRepository projectRepository;
-    public PaginatedLabelDto createLabel(Integer projectId, CreateLabelDto dto, Pageable pageable) {
+    public PaginatedLabelDto createLabel(Integer projectId, UpdateLabelDto dto, Pageable pageable) {
         Project project = projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
 
         Label label = labelMapper.toEntity(dto);
@@ -48,6 +48,22 @@ public class LabelService {
     }
 
     public PaginatedLabelDto getLabels(Integer projectId, Pageable pageable) {
+        Page<Label> labels = labelRepository.findAllByProjectId(projectId, pageable);
+        return labelMapper.toPaginatedDto(labels.getTotalPages(), labels.getNumber(), labels.getSize(), labelsToLabelDtos(labels.getContent()));
+    }
+
+    public PaginatedLabelDto updateLabel(Integer projectId, Integer labelId, UpdateLabelDto dto, Pageable pageable) {
+        Label label = labelRepository.findById(labelId).orElseThrow(() -> new ResourceNotFoundException("Label to update not found"));
+
+        labelMapper.updateLabelFromDto(dto, label);
+
+        Page<Label> labels = labelRepository.findAllByProjectId(projectId, pageable);
+        return labelMapper.toPaginatedDto(labels.getTotalPages(), labels.getNumber(), labels.getSize(), labelsToLabelDtos(labels.getContent()));
+    }
+
+    public PaginatedLabelDto deleteLabel(Integer projectId, Integer labelId, Pageable pageable) {
+        labelRepository.deleteById(labelId);
+
         Page<Label> labels = labelRepository.findAllByProjectId(projectId, pageable);
         return labelMapper.toPaginatedDto(labels.getTotalPages(), labels.getNumber(), labels.getSize(), labelsToLabelDtos(labels.getContent()));
     }
