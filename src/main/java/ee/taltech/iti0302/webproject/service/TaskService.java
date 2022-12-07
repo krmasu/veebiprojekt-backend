@@ -75,7 +75,7 @@ public class TaskService {
         taskRepository.save(task);
 
         Page<Task> tasks = taskRepository.findAllByProjectId(project.getId(), pageable);
-        return taskMapper.toPaginatedDto(tasks.getTotalPages(), pageable.getPageNumber(), pageable.getPageSize(), tasksToTaskDtos(tasks.getContent()));
+        return taskMapper.toPaginatedDto(tasks.getTotalPages(), tasks.getNumber(), tasks.getSize(), tasksToTaskDtos(tasks.getContent()));
     }
 
     public PaginatedTaskDto getTasks(Integer projectId, Pageable pageable, String title, String assigneeName, Integer statusId, Integer milestoneId) {
@@ -86,7 +86,7 @@ public class TaskService {
                 .and(statusId == null ? null : TaskSpecification.byStatus(statusId))
                 .and(milestoneId == null ? null : TaskSpecification.byMilestone(milestoneId));
         Page<Task> tasks = taskRepository.findAll(specification, pageable);
-        return taskMapper.toPaginatedDto(tasks.getTotalPages(), pageable.getPageNumber(), pageable.getPageSize(), tasksToTaskDtos(tasks.getContent()));
+        return taskMapper.toPaginatedDto(tasks.getTotalPages(), tasks.getNumber(), tasks.getSize(), tasksToTaskDtos(tasks.getContent()));
     }
 
     public List<TaskDto> tasksToTaskDtos(List<Task> tasks) {
@@ -101,7 +101,7 @@ public class TaskService {
     public PaginatedTaskDto deleteTask(Integer projectId, Integer taskId, Pageable pageable) {
         taskRepository.deleteById(taskId);
         Page<Task> tasks = taskRepository.findAllByProjectId(projectId, pageable);
-        return taskMapper.toPaginatedDto(tasks.getTotalPages(), pageable.getPageNumber(), pageable.getPageSize(), tasksToTaskDtos(tasks.getContent()));
+        return taskMapper.toPaginatedDto(tasks.getTotalPages(), tasks.getNumber(), tasks.getSize(), tasksToTaskDtos(tasks.getContent()));
     }
 
     public PaginatedTaskDto updateTask(Integer projectId, UpdateTaskDto dto, Pageable pageable, Integer taskId) {
@@ -124,6 +124,6 @@ public class TaskService {
             task.setMilestone(milestoneRepository.findById(dto.getMilestoneId()).orElseThrow(() -> new ResourceNotFoundException("Milestone not found")));
         }
         Page<Task> tasks = taskRepository.findAllByProjectId(projectId, pageable);
-        return taskMapper.toPaginatedDto(tasks.getTotalPages(), pageable.getPageNumber(), pageable.getPageSize(), tasksToTaskDtos(tasks.getContent()));
+        return taskMapper.toPaginatedDto(tasks.getTotalPages(), tasks.getNumber(), tasks.getSize(), tasksToTaskDtos(tasks.getContent()));
     }
 }
