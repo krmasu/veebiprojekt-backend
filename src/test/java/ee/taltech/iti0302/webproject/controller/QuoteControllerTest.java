@@ -1,6 +1,6 @@
 package ee.taltech.iti0302.webproject.controller;
 
-import ee.taltech.iti0302.webproject.dto.QuoteDto;
+import ee.taltech.iti0302.webproject.dto.quote.QuoteDto;
 import ee.taltech.iti0302.webproject.service.QuoteService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
