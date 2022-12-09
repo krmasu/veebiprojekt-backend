@@ -41,8 +41,8 @@ public class AuthenticateUserService {
     private static final long TWELVE_HOURS_AS_MILLI = 43200000;
 
     public Integer registerUser(RegisterUserDto request) {
-        String requestUsername = request.getUsername().toLowerCase();
-        String requestEmail = request.getEmail().toLowerCase();
+        String requestUsername = request.getUsername().toLowerCase().trim();
+        String requestEmail = request.getEmail().toLowerCase().trim();
 
         boolean usernameExists = userRepository.existsByUsername(requestUsername);
         boolean emailExists = userRepository.existsByEmail(requestEmail);
@@ -60,10 +60,10 @@ public class AuthenticateUserService {
     }
 
     public LoginResponseDto loginUser(LoginRequestDto request) {
-        Optional<AppUser> optionalUser = userRepository.findByUsernameIgnoreCase(request.getUsername());
+        Optional<AppUser> optionalUser = userRepository.findByUsernameIgnoreCase(request.getUsername().trim());
         AppUser user = optionalUser.orElseThrow(() -> new InvalidCredentialsException(InvalidCredentialsException.Reason.USERNAME));
 
-        if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (passwordEncoder.matches(request.getPassword().trim(), user.getPassword())) {
             Map<String, Object> claims = new HashMap<>();
             claims.put("username", user.getUsername());
             long issuedAt = System.currentTimeMillis();
