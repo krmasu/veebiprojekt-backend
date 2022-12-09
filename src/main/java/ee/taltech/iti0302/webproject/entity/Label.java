@@ -15,6 +15,7 @@ public class Label {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String title;
+    private String colorCode;
 
     @ManyToOne
     @JoinColumn(name = "project_id")
