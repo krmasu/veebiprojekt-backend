@@ -5,10 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRequestDto {
-    private Integer id;
+public class PaginatedUserResponseDto {
+    private Integer totalPages;
+    private Integer page;
+    private Integer size;
+    private List<UserResponseDto> users;
 }
