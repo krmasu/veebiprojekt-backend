@@ -6,6 +6,7 @@ import ee.taltech.iti0302.webproject.dto.project.ProjectDto;
 import ee.taltech.iti0302.webproject.dto.authentication.RegisterUserDto;
 import ee.taltech.iti0302.webproject.entity.AppUser;
 import ee.taltech.iti0302.webproject.entity.Project;
+import ee.taltech.iti0302.webproject.exception.ApplicationException;
 import ee.taltech.iti0302.webproject.exception.InvalidCredentialsException;
 import ee.taltech.iti0302.webproject.exception.UserExistsException;
 import ee.taltech.iti0302.webproject.repository.UserRepository;
@@ -27,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Transactional
@@ -43,20 +46,47 @@ public class AuthenticateUserService {
     public Integer registerUser(RegisterUserDto request) {
         String requestUsername = request.getUsername().toLowerCase().trim();
         String requestEmail = request.getEmail().toLowerCase().trim();
+        String requestPassword = request.getPassword();
+
+        isEmailValidCheck(requestEmail);
+        isPasswordValidCheck(requestPassword);
 
         boolean usernameExists = userRepository.existsByUsername(requestUsername);
-        boolean emailExists = userRepository.existsByEmail(requestEmail);
         if (usernameExists) {
             throw new UserExistsException(UserExistsException.Reason.USERNAME);
         }
+
+        boolean emailExists = userRepository.existsByEmail(requestEmail);
         if (emailExists) {
             throw new UserExistsException(UserExistsException.Reason.EMAIL);
         }
+
         AppUser user = userMapper.toEntity(request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPassword(passwordEncoder.encode(requestPassword));
 
         AppUser savedUser = userRepository.save(user);
         return savedUser.getId();
+    }
+
+    private void isPasswordValidCheck(String requestPassword) {
+
+    }
+
+    private void isEmailValidCheck(String requestEmail) {
+        // Local part
+        // Dots are not allowed at the start or end of the local part
+        // Consecutive dots are not allowed
+        // Max 64 characters for local part
+        // "-", "_" and "." are allowed
+        // Domain part
+        // "-" and "." are not allowed at the start or the end of the domain part
+        // No consecutive dots
+        Pattern regexPattern = Pattern.compile("^(?=.{1,64}@)[\\p{L}\\d_-]+(\\.[\\p{L}\\d_-]+)*@"
+                + "[^-][\\p{L}\\d-]+(\\.[\\p{L}\\d-]+)*(\\.\\p{L}{2,})$");
+        Matcher matcher = regexPattern.matcher(requestEmail);
+        if (!matcher.matches()) {
+            throw new ApplicationException("Email: %s is not valid".formatted(requestEmail));
+        }
     }
 
     public LoginResponseDto loginUser(LoginRequestDto request) {
