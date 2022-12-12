@@ -2,6 +2,7 @@ package ee.taltech.iti0302.webproject.service;
 
 import ee.taltech.iti0302.webproject.dto.authentication.LoginRequestDto;
 import ee.taltech.iti0302.webproject.dto.authentication.LoginResponseDto;
+import ee.taltech.iti0302.webproject.dto.authentication.RegisterResponseDto;
 import ee.taltech.iti0302.webproject.dto.project.ProjectDto;
 import ee.taltech.iti0302.webproject.dto.authentication.RegisterUserDto;
 import ee.taltech.iti0302.webproject.entity.AppUser;
@@ -40,7 +41,7 @@ public class AuthenticateUserService {
 
     private static final long TWELVE_HOURS_AS_MILLI = 43200000;
 
-    public Integer registerUser(RegisterUserDto request) {
+    public RegisterResponseDto registerUser(RegisterUserDto request) {
         String requestUsername = request.getUsername().toLowerCase().trim();
         String requestEmail = request.getEmail().toLowerCase().trim();
 
@@ -56,7 +57,29 @@ public class AuthenticateUserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         AppUser savedUser = userRepository.save(user);
-        return savedUser.getId();
+        Integer userId = savedUser.getId();
+        return RegisterResponseDto.builder()
+                .authToken(createAuthToken(savedUser.getUsername(), userId))
+                .email(savedUser.getEmail())
+                .id(userId)
+                .message("Registration successful")
+                .ok(true)
+                .build();
+    }
+
+    private String createAuthToken(String username, Integer userId) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("username", username);
+        long issuedAt = System.currentTimeMillis();
+        byte[] keyBites = Decoders.BASE64.decode("OERweXEyQ1B1cmJaNW9taklBR0xrSnVKMGFmbG9wTXNJUjBiQkZrdQ==");
+        Key key = Keys.hmacShaKeyFor(keyBites);
+        return Jwts.builder()
+                .setSubject(userId.toString())
+                .addClaims(claims)
+                .setIssuedAt(new Date(issuedAt))
+                .setExpiration(new Date(issuedAt + TWELVE_HOURS_AS_MILLI))
+                .signWith(key)
+                .compact();
     }
 
     public LoginResponseDto loginUser(LoginRequestDto request) {
@@ -64,22 +87,10 @@ public class AuthenticateUserService {
         AppUser user = optionalUser.orElseThrow(() -> new InvalidCredentialsException(InvalidCredentialsException.Reason.USERNAME));
 
         if (passwordEncoder.matches(request.getPassword().trim(), user.getPassword())) {
-            Map<String, Object> claims = new HashMap<>();
-            claims.put("username", user.getUsername());
-            long issuedAt = System.currentTimeMillis();
-            byte[] keyBites = Decoders.BASE64.decode("OERweXEyQ1B1cmJaNW9taklBR0xrSnVKMGFmbG9wTXNJUjBiQkZrdQ==");
-            Key key = Keys.hmacShaKeyFor(keyBites);
-            String authToken = Jwts.builder()
-                    .setSubject(user.getId().toString())
-                    .addClaims(claims)
-                    .setIssuedAt(new Date(issuedAt))
-                    .setExpiration(new Date(issuedAt + TWELVE_HOURS_AS_MILLI))
-                    .signWith(key)
-                    .compact();
             List<Project> projects = user.getProjects();
             List<ProjectDto> projectDtoList = projectMapper.toDtoList(projects);
             log.info("Logged in user with id: {}", user.getId());
-            return userMapper.toLoginResponseDto(authToken, user.getEmail(), projectDtoList, user.getId());
+            return userMapper.toLoginResponseDto(createAuthToken(user.getUsername(), user.getId()), user.getEmail(), projectDtoList, user.getId());
         } else {
             throw new InvalidCredentialsException(InvalidCredentialsException.Reason.PASSWORD);
         }
