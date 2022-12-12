@@ -25,6 +25,7 @@ public class UserController {
 
     @GetMapping("api/user/{userId}")
     public UserDto getUserData(@PathVariable("userId") Integer userId) {
+        log.info("Getting data of user with id: {}", userId);
         return userService.getUserData(userId);
     }
 
