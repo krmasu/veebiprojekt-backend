@@ -1,6 +1,6 @@
 package ee.taltech.iti0302.webproject.mapper;
 
-import ee.taltech.iti0302.webproject.dto.UpdateMilestoneDto;
+import ee.taltech.iti0302.webproject.dto.milestone.UpdateMilestoneDto;
 import ee.taltech.iti0302.webproject.dto.milestone.CreateMilestoneDto;
 import ee.taltech.iti0302.webproject.dto.milestone.MilestoneDto;
 import ee.taltech.iti0302.webproject.dto.milestone.PaginatedMilestoneDto;

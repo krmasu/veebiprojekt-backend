@@ -1,5 +1,6 @@
-package ee.taltech.iti0302.webproject.controller;
+package ee.taltech.iti0302.webproject.unit.controller;
 
+import ee.taltech.iti0302.webproject.controller.TaskController;
 import ee.taltech.iti0302.webproject.dto.task.CreateTaskDto;
 import ee.taltech.iti0302.webproject.dto.task.PaginatedTaskDto;
 import ee.taltech.iti0302.webproject.dto.task.UpdateTaskDto;
