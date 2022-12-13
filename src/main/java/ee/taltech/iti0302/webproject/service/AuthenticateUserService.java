@@ -68,6 +68,7 @@ public class AuthenticateUserService {
     }
 
     private String createAuthToken(String username, Integer userId) {
+        log.info("Creating authentication token for user with id: {}", userId);
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", username);
         long issuedAt = System.currentTimeMillis();
