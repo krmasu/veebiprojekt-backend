@@ -1,4 +1,4 @@
-package ee.taltech.iti0302.webproject.controller;
+package ee.taltech.iti0302.webproject.unit.controller;
 
 import ee.taltech.iti0302.webproject.controller.AuthenticateUserController;
 import ee.taltech.iti0302.webproject.dto.authentication.LoginRequestDto;
@@ -49,7 +49,6 @@ class AuthenticateUserControllerTest {
         var result = authenticateUserController.registerUser(registerUserDto);
         //then
         then(authenticateUserService).should().registerUser(registerUserDto);
-        ResponseEntity<Object> expected = new ResponseEntity<>(new UserCreatedDto("Registration successful", true), HttpStatus.CREATED);
         ResponseEntity<Object> expected = new ResponseEntity<>(registerResponseDto, HttpStatus.CREATED);
         assertEquals(expected.getStatusCodeValue(), result.getStatusCodeValue());
         assertEquals(expected.getBody(), result.getBody());
