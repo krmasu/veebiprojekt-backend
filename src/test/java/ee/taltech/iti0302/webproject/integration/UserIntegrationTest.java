@@ -7,8 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
+import java.util.*;
 
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -22,6 +23,10 @@ class UserIntegrationTest extends AbstractIntegrationTestClass {
 
     @Test
     void getUserData_UserExists_ReturnsUserData() throws Exception {
+        Map<String, Object> projectMap = new LinkedHashMap<>();
+        projectMap.put("id", 1);
+        projectMap.put("title", "test_project");
+
         mvc.perform(post("/api/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{ \"id\": 1}")
@@ -30,6 +35,7 @@ class UserIntegrationTest extends AbstractIntegrationTestClass {
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.username").value("test_user"))
                 .andExpect(jsonPath("$.email").value("test.user@mail.com"))
-                .andExpect(jsonPath("$.projects").value(new ArrayList<>()));
+                .andExpect(jsonPath("$.projects").isArray())
+                .andExpect(jsonPath("$.projects[0]", is(projectMap)));
     }
 }

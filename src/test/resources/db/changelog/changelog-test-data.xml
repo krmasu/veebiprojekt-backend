@@ -2,9 +2,7 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd
-        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.5.xsd">
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
     <include file="db/changelog/changelog-master.xml"/>
 
@@ -15,5 +13,50 @@
             <column name="password" value="test_password"/>
         </insert>
     </changeSet>
+    <changeSet id="add projects" author="Karl Markus Tarre">
+        <insert tableName="project">
+            <column name="title" value="test_project"/>
+        </insert>
+    </changeSet>
+    <changeSet id="add labels" author="Karl Markus Tarre">
+        <insert tableName="label">
+            <column name="title" value="test_label"/>
+            <column name="project_id" valueNumeric="1"/>
+            <column name="color_code" value="FFFFFF"/>
+        </insert>
+    </changeSet>
+    <changeSet id="add milestones" author="Karl Markus Tarre">
+        <insert tableName="milestone">
+            <column name="title" value="test_milestone"/>
+            <column name="description" value="test description"/>
+            <column name="project_id" valueNumeric="1"/>
+            <column name="start_date" valueDate="2022-12-22"/>
+            <column name="end_date" valueDate="2022-12-23"/>
+        </insert>
+    </changeSet>
+    <changeSet id="add tasks" author="Karl Markus Tarre">
+        <insert tableName="task">
+            <column name="title" value="test_task"/>
+            <column name="description" value="test description"/>
+            <column name="deadline" valueDate="2022-12-22"/>
+            <column name="project_id" valueNumeric="1"/>
+            <column name="assignee_id" valueNumeric="1"/>
+            <column name="status_id" valueNumeric="1"/>
+            <column name="milestone_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="add task_labels" author="Karl Markus Tarre">
+        <insert tableName="task_labels">
+            <column name="task_id" valueNumeric="1"/>
+            <column name="label_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="add user_projects" author="Karl Markus Tarre">
+        <insert tableName="user_projects">
+            <column name="user_id" valueNumeric="1"/>
+            <column name="project_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
 
 </databaseChangeLog>
