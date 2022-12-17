@@ -1,5 +1,6 @@
-package ee.taltech.iti0302.webproject.controller;
+package ee.taltech.iti0302.webproject.unit.controller;
 
+import ee.taltech.iti0302.webproject.controller.AuthenticateUserController;
 import ee.taltech.iti0302.webproject.dto.authentication.LoginRequestDto;
 import ee.taltech.iti0302.webproject.dto.authentication.LoginResponseDto;
 import ee.taltech.iti0302.webproject.dto.authentication.RegisterUserDto;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class AuthenticateUserControllerTest {
@@ -39,6 +41,7 @@ class AuthenticateUserControllerTest {
         // when
         var result = authenticateUserController.registerUser(registerUserDto);
         //then
+        then(authenticateUserService).should().registerUser(registerUserDto);
         ResponseEntity<Object> expected = new ResponseEntity<>(new UserCreatedDto("Registration successful", true), HttpStatus.CREATED);
         assertEquals(expected.getStatusCodeValue(), result.getStatusCodeValue());
         assertEquals(expected.getBody(), result.getBody());
@@ -46,6 +49,7 @@ class AuthenticateUserControllerTest {
 
     @Test
     void LoginUser_Valid_ReturnsLoginResponse() {
+        // given
         LoginRequestDto loginRequestDto = LoginRequestDto.builder()
                 .username("aadu")
                 .password("salajane")
@@ -57,6 +61,12 @@ class AuthenticateUserControllerTest {
                 .id(1)
                 .build();
         given(authenticateUserService.loginUser(loginRequestDto)).willReturn(loginResponseDto);
-        assertEquals(loginResponseDto, authenticateUserController.loginUser(loginRequestDto));
+
+        // when
+        var result = authenticateUserController.loginUser(loginRequestDto);
+
+        // then
+        then(authenticateUserService).should().loginUser(loginRequestDto);
+        assertEquals(loginResponseDto, result);
     }
 }

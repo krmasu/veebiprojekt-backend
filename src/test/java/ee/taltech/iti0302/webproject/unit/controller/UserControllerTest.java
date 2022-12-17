@@ -1,5 +1,6 @@
-package ee.taltech.iti0302.webproject.controller;
+package ee.taltech.iti0302.webproject.unit.controller;
 
+import ee.taltech.iti0302.webproject.controller.UserController;
 import ee.taltech.iti0302.webproject.dto.project.ProjectDto;
 import ee.taltech.iti0302.webproject.dto.user.UserDto;
 import ee.taltech.iti0302.webproject.dto.user.UserRequestDto;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
@@ -24,6 +26,7 @@ class UserControllerTest {
 
     @Test
     void GetUserData_ValidId_ReturnsUserDto() {
+        // given
         UserRequestDto userRequestDto = UserRequestDto.builder()
                 .id(1)
                 .build();
@@ -38,9 +41,10 @@ class UserControllerTest {
                 .build();
 
         given(userService.getUserData(userRequestDto)).willReturn(userDto);
-
+        // when
         var result = userController.getUserData(userRequestDto);
-
+        // then
+        then(userService).should().getUserData(userRequestDto);
         assertEquals(1, result.getProjects().size());
         assertEquals("user", result.getUsername());
     }
