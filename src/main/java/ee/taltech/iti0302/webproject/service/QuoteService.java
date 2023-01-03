@@ -1,6 +1,6 @@
 package ee.taltech.iti0302.webproject.service;
 
-import ee.taltech.iti0302.webproject.dto.QuoteDto;
+import ee.taltech.iti0302.webproject.dto.quote.QuoteDto;
 import ee.taltech.iti0302.webproject.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;

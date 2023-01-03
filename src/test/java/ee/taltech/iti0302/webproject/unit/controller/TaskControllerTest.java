@@ -1,5 +1,6 @@
-package ee.taltech.iti0302.webproject.controller;
+package ee.taltech.iti0302.webproject.unit.controller;
 
+import ee.taltech.iti0302.webproject.controller.TaskController;
 import ee.taltech.iti0302.webproject.dto.task.CreateTaskDto;
 import ee.taltech.iti0302.webproject.dto.task.PaginatedTaskDto;
 import ee.taltech.iti0302.webproject.dto.task.UpdateTaskDto;
@@ -85,7 +86,7 @@ class TaskControllerTest {
         given(taskService.updateTask(1, updateTaskDto, pageable, 1)).willReturn(paginatedTaskDto);
 
         // When
-        var result  = taskController.updateTask(1, updateTaskDto, pageable, 1);
+        var result  = taskController.updateTask(1, 1, updateTaskDto, pageable);
 
         // Then
         then(taskService).should().updateTask(1, updateTaskDto, pageable, 1);
