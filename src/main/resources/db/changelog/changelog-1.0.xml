@@ -249,4 +249,7 @@
     <changeSet id="2022-12-01 make milestone.project_id not null" author="andreas">
         <addNotNullConstraint tableName="milestone" columnName="project_id"/>
     </changeSet>
+    <changeSet id="2022-12-11 change type of column color_code in label" author="andreas">
+        <modifyDataType tableName="label" columnName="color_code" newDataType="VARCHAR(64)" />
+    </changeSet>
 </databaseChangeLog>
