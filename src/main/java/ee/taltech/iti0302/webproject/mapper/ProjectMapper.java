@@ -1,5 +1,6 @@
 package ee.taltech.iti0302.webproject.mapper;
 
+import ee.taltech.iti0302.webproject.dto.project.CreateProjectDto;
 import ee.taltech.iti0302.webproject.dto.project.ProjectDto;
 import ee.taltech.iti0302.webproject.dto.project.UpdateProjectDto;
 import ee.taltech.iti0302.webproject.entity.Project;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ProjectMapper {
+    Project toEntity(CreateProjectDto createProjectDto);
     ProjectDto toDto(Project project);
     List<ProjectDto> toDtoList(List<Project> projects);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
