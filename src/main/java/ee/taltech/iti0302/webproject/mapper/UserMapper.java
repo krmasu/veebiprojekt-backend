@@ -1,5 +1,6 @@
 package ee.taltech.iti0302.webproject.mapper;
 
+import ee.taltech.iti0302.webproject.dto.user.PaginatedUserResponseDto;
 import ee.taltech.iti0302.webproject.dto.user.UserResponseDto;
 import ee.taltech.iti0302.webproject.dto.authentication.LoginResponseDto;
 import ee.taltech.iti0302.webproject.dto.user.UserDto;
@@ -19,4 +20,5 @@ public interface UserMapper {
     UserResponseDto toResponseDto(AppUser user);
 
     List<UserResponseDto> toResponseDtoList(List<AppUser> users);
+    PaginatedUserResponseDto toPaginatedUserResponseDto(Integer totalPages, Integer page, Integer size, List<UserResponseDto> users);
 }

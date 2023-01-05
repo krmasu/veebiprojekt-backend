@@ -1,6 +1,9 @@
 package ee.taltech.iti0302.webproject.repository;
 
 import ee.taltech.iti0302.webproject.entity.AppUser;
+import ee.taltech.iti0302.webproject.entity.Project;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
 
 import java.util.Optional;
@@ -14,5 +17,5 @@ public interface UserRepository extends JpaRepositoryImplementation<AppUser, Int
 
     boolean existsByEmail(String email);
 
-    boolean existsById(Integer id);
+    Page<AppUser> findAllByProjectsContains(Project project, Pageable pageable);
 }

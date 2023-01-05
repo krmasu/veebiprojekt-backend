@@ -67,6 +67,20 @@ public class AuthenticateUserService {
                 .build();
     }
 
+    public LoginResponseDto loginUser(LoginRequestDto request) {
+        Optional<AppUser> optionalUser = userRepository.findByUsernameIgnoreCase(request.getUsername().trim());
+        AppUser user = optionalUser.orElseThrow(() -> new InvalidCredentialsException(InvalidCredentialsException.Reason.USERNAME));
+
+        if (passwordEncoder.matches(request.getPassword().trim(), user.getPassword())) {
+            List<Project> projects = user.getProjects();
+            List<ProjectDto> projectDtoList = projectMapper.toDtoList(projects);
+            log.info("Logged in user with id: {}", user.getId());
+            return userMapper.toLoginResponseDto(createAuthToken(user.getUsername(), user.getId()), user.getEmail(), projectDtoList, user.getId());
+        } else {
+            throw new InvalidCredentialsException(InvalidCredentialsException.Reason.PASSWORD);
+        }
+    }
+
     private String createAuthToken(String username, Integer userId) {
         log.info("Creating authentication token for user with id: {}", userId);
         Map<String, Object> claims = new HashMap<>();
@@ -81,19 +95,5 @@ public class AuthenticateUserService {
                 .setExpiration(new Date(issuedAt + TWELVE_HOURS_AS_MILLI))
                 .signWith(key)
                 .compact();
-    }
-
-    public LoginResponseDto loginUser(LoginRequestDto request) {
-        Optional<AppUser> optionalUser = userRepository.findByUsernameIgnoreCase(request.getUsername().trim());
-        AppUser user = optionalUser.orElseThrow(() -> new InvalidCredentialsException(InvalidCredentialsException.Reason.USERNAME));
-
-        if (passwordEncoder.matches(request.getPassword().trim(), user.getPassword())) {
-            List<Project> projects = user.getProjects();
-            List<ProjectDto> projectDtoList = projectMapper.toDtoList(projects);
-            log.info("Logged in user with id: {}", user.getId());
-            return userMapper.toLoginResponseDto(createAuthToken(user.getUsername(), user.getId()), user.getEmail(), projectDtoList, user.getId());
-        } else {
-            throw new InvalidCredentialsException(InvalidCredentialsException.Reason.PASSWORD);
-        }
     }
 }
