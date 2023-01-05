@@ -32,9 +32,6 @@ class UserControllerTest {
     @Test
     void GetUserData_ValidId_ReturnsUserDto() {
         // given
-        UserRequestDto userRequestDto = UserRequestDto.builder()
-                .id(1)
-                .build();
         UserDto userDto = UserDto.builder()
                 .id(1)
                 .email("email@email.com")
@@ -45,14 +42,11 @@ class UserControllerTest {
                         .build()))
                 .build();
 
-        given(userService.getUserData(userRequestDto)).willReturn(userDto);
-        // when
-        var result = userController.getUserData(userRequestDto);
-        // then
-        then(userService).should().getUserData(userRequestDto);
         given(userService.getUserData(1)).willReturn(userDto);
-
+        // when
         var result = userController.getUserData(1);
+        // then
+        then(userService).should().getUserData(1);
 
         assertEquals(1, result.getProjects().size());
         assertEquals("user", result.getUsername());
