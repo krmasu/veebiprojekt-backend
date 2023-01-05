@@ -1,5 +1,6 @@
-package ee.taltech.iti0302.webproject.controller;
+package ee.taltech.iti0302.webproject.unit.controller;
 
+import ee.taltech.iti0302.webproject.controller.ProjectController;
 import ee.taltech.iti0302.webproject.dto.project.AddMembersToProjectDto;
 import ee.taltech.iti0302.webproject.dto.project.CreateProjectDto;
 import ee.taltech.iti0302.webproject.dto.project.DeleteProjectDto;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class ProjectControllerTest {
@@ -30,18 +32,23 @@ class ProjectControllerTest {
 
     @Test
     void GetProjectById_Valid_ReturnsProjectDto() {
+        // given
         ProjectDto projectDto = ProjectDto.builder()
                         .id(1)
                         .title("title")
                         .build();
         given(projectService.findById(1)).willReturn(projectDto);
+        // when
         var result = projectController.getProjectById(1, principal);
+        // then
+        then(projectService).should().findById(1);
         assertEquals("title", result.getTitle());
         assertEquals(1, result.getId());
     }
 
     @Test
     void CreateProject_Valid_ReturnsListOfUserProjectsDtos() {
+        // given
         CreateProjectDto createProjectDto = CreateProjectDto.builder()
                 .ownerId(2)
                 .title("title2")
@@ -58,15 +65,17 @@ class ProjectControllerTest {
         projectDtos.add(projectDto1);
         projectDtos.add(projectDto2);
         given(projectService.createProject(createProjectDto)).willReturn(projectDtos);
-
+        // when
         var result = projectController.createProject(createProjectDto, principal);
-
+        // then
+        then(projectService).should().createProject(createProjectDto);
         assertEquals(2, result.size());
         assertEquals("title1", result.get(0).getTitle());
     }
 
     @Test
     void UpdateProject_Valid_ReturnsUpdatedProject() {
+        // given
         UpdateProjectDto updateProjectDto = UpdateProjectDto.builder()
                 .projectId(1)
                 .title("project")
@@ -76,27 +85,33 @@ class ProjectControllerTest {
                         .title("project")
                         .build();
         given(projectService.updateProject(updateProjectDto)).willReturn(projectDto);
-
+        // when
         var result = projectController.updateProject(updateProjectDto, principal);
-
+        // then
+        then(projectService).should().updateProject(updateProjectDto);
         assertEquals(1, result.getId());
         assertEquals("project", result.getTitle());
     }
 
     @Test
     void DeleteProject_NoOtherProjects_ReturnsEmptyList() {
+        // given
         DeleteProjectDto deleteProjectDto = DeleteProjectDto.builder()
                 .ownerId(1)
                 .projectId(1)
                 .build();
         List<ProjectDto> projectDtos = new ArrayList<>();
         given(projectService.deleteById(deleteProjectDto)).willReturn(projectDtos);
-
-        assertTrue(projectController.deleteProject(deleteProjectDto).isEmpty());
+        // when
+        var result = projectController.deleteProject(deleteProjectDto);
+        // then
+        then(projectService).should().deleteById(deleteProjectDto);
+        assertTrue(result.isEmpty());
     }
 
     @Test
     void DeleteProject_OtherProjectsExist_ReturnsRemainingProjects() {
+        // given
         DeleteProjectDto deleteProjectDto = DeleteProjectDto.builder()
                 .ownerId(1)
                 .projectId(3)
@@ -114,8 +129,70 @@ class ProjectControllerTest {
         projectDtos.add(projectDto2);
 
         given(projectService.deleteById(deleteProjectDto)).willReturn(projectDtos);
-
+        // when
         var result = projectController.deleteProject(deleteProjectDto);
+        // then
+        then(projectService).should().deleteById(deleteProjectDto);
         assertEquals(2, result.size());
+    }
+
+    @Test
+    void GetProjectMembers_MultipleMembers_ReturnsListOfUserResponseDtos() {
+        // given
+        List<UserResponseDto> userResponseDtos = new ArrayList<>();
+        UserResponseDto userResponseDto1 = UserResponseDto.builder()
+                .id(1)
+                .username("aadu1")
+                .build();
+        UserResponseDto userResponseDto2 = UserResponseDto.builder()
+                .id(2)
+                .username("aadu2")
+                .build();
+        UserResponseDto userResponseDto3 = UserResponseDto.builder()
+                .id(3)
+                .username("aadu3")
+                .build();
+        userResponseDtos.add(userResponseDto1);
+        userResponseDtos.add(userResponseDto2);
+        userResponseDtos.add(userResponseDto3);
+
+        given(projectService.getProjectMembers(1)).willReturn(userResponseDtos);
+        // when
+        var result = projectController.getProjectMembers(1, principal);
+        // then
+        then(projectService).should().getProjectMembers(1);
+        assertEquals(3, result.size());
+        assertTrue(result.contains(userResponseDto3));
+    }
+
+    @Test
+    void AddNewProjectMembers_AddMultiple_ReturnsListOfUserResponseDto() {
+        // given
+        AddMembersToProjectDto addMembersToProjectDto = AddMembersToProjectDto.builder()
+                .userIds(List.of(2, 3))
+                .build();
+        List<UserResponseDto> userResponseDtos = new ArrayList<>();
+        UserResponseDto userResponseDto1 = UserResponseDto.builder()
+                .id(1)
+                .username("aadu1")
+                .build();
+        UserResponseDto userResponseDto2 = UserResponseDto.builder()
+                .id(2)
+                .username("aadu2")
+                .build();
+        UserResponseDto userResponseDto3 = UserResponseDto.builder()
+                .id(3)
+                .username("aadu3")
+                .build();
+        userResponseDtos.add(userResponseDto1);
+        userResponseDtos.add(userResponseDto2);
+        userResponseDtos.add(userResponseDto3);
+
+        given(projectService.addNewProjectMembers(1, addMembersToProjectDto)).willReturn(userResponseDtos);
+        // when
+        var result = projectController.addNewProjectMembers(1, addMembersToProjectDto);
+        // then
+        then(projectService).should().addNewProjectMembers(1, addMembersToProjectDto);
+        assertEquals(3, result.size());
     }
 }

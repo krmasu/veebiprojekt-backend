@@ -1,11 +1,12 @@
 package ee.taltech.iti0302.webproject.service;
 
-import ee.taltech.iti0302.webproject.dto.UpdateMilestoneDto;
+import ee.taltech.iti0302.webproject.dto.milestone.UpdateMilestoneDto;
 import ee.taltech.iti0302.webproject.dto.milestone.CreateMilestoneDto;
 import ee.taltech.iti0302.webproject.dto.milestone.MilestoneDto;
 import ee.taltech.iti0302.webproject.dto.milestone.PaginatedMilestoneDto;
 import ee.taltech.iti0302.webproject.entity.Milestone;
 import ee.taltech.iti0302.webproject.entity.Project;
+import ee.taltech.iti0302.webproject.exception.ApplicationException;
 import ee.taltech.iti0302.webproject.exception.ResourceNotFoundException;
 import ee.taltech.iti0302.webproject.mapper.MilestoneMapper;
 import ee.taltech.iti0302.webproject.repository.MilestoneRepository;
@@ -18,6 +19,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +47,9 @@ public class MilestoneService {
     }
 
     public PaginatedMilestoneDto createMilestone(Integer projectId, CreateMilestoneDto dto, Pageable pageable) {
+        if (dto.getEndDate().isBefore(dto.getStartDate())) {
+            throw new ApplicationException("End date can't be before start date");
+        }
         Milestone milestone = milestoneMapper.toEntity(dto);
 
         Project project = projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
@@ -57,8 +62,16 @@ public class MilestoneService {
     }
 
     public PaginatedMilestoneDto updateMilestone(Integer projectId, Integer milestoneId, UpdateMilestoneDto updateMilestoneDto, Pageable pageable) {
+        LocalDate startDate = updateMilestoneDto.getStartDate();
+        LocalDate endDate = updateMilestoneDto.getEndDate();
+
         Milestone milestone = milestoneRepository.findById(milestoneId).orElseThrow(() -> new ResourceNotFoundException("Milestone to update not found"));
 
+        if (startDate != null && endDate != null && endDate.isBefore(startDate) ||
+                startDate == null && endDate != null && endDate.isBefore(milestone.getStartDate()) ||
+                endDate == null && startDate != null && milestone.getEndDate().isBefore(startDate)) {
+            throw new ApplicationException("End date can't be before start date");
+        }
         milestoneMapper.updateFromDto(updateMilestoneDto, milestone);
 
         Page<Milestone> milestones = milestoneRepository.findAllByProjectId(projectId, pageable);
