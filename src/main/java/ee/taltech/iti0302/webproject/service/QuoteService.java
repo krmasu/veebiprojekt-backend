@@ -25,7 +25,7 @@ public class QuoteService {
     private static final String API_URL = "https://api.api-ninjas.com/v1/quotes";
     private static final String API_KEY = "M+y55/ri/49+KmWA57zXew==wPoo7kdV0BrZ3PfS";
 
-    public HttpHeaders getApiKeyHeader() {
+    private HttpHeaders getApiKeyHeader() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("x-api-key", API_KEY);
         return headers;
