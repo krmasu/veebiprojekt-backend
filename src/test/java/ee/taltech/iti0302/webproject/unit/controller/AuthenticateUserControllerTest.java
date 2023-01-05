@@ -1,7 +1,9 @@
-package ee.taltech.iti0302.webproject.controller;
+package ee.taltech.iti0302.webproject.unit.controller;
 
+import ee.taltech.iti0302.webproject.controller.AuthenticateUserController;
 import ee.taltech.iti0302.webproject.dto.authentication.LoginRequestDto;
 import ee.taltech.iti0302.webproject.dto.authentication.LoginResponseDto;
+import ee.taltech.iti0302.webproject.dto.authentication.RegisterResponseDto;
 import ee.taltech.iti0302.webproject.dto.authentication.RegisterUserDto;
 import ee.taltech.iti0302.webproject.dto.user.UserCreatedDto;
 import ee.taltech.iti0302.webproject.service.AuthenticateUserService;
@@ -15,8 +17,9 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class AuthenticateUserControllerTest {
@@ -35,17 +38,26 @@ class AuthenticateUserControllerTest {
                         .email("aadu@aadumail.ee")
                         .password("salajane")
                         .build();
-        given(authenticateUserService.registerUser(registerUserDto)).willReturn(1);
+        RegisterResponseDto registerResponseDto = RegisterResponseDto.builder()
+                .authToken("A23smfsa73SCCWAWFEASC3543asfd34as")
+                .email("email")
+                .id(1)
+                .message("Registration successful")
+                .ok(true)
+                .build();
+        given(authenticateUserService.registerUser(registerUserDto)).willReturn(registerResponseDto);
         // when
         var result = authenticateUserController.registerUser(registerUserDto);
         //then
-        ResponseEntity<Object> expected = new ResponseEntity<>(new UserCreatedDto("Registration successful", true), HttpStatus.CREATED);
+        then(authenticateUserService).should().registerUser(registerUserDto);
+        ResponseEntity<Object> expected = new ResponseEntity<>(registerResponseDto, HttpStatus.CREATED);
         assertEquals(expected.getStatusCodeValue(), result.getStatusCodeValue());
         assertEquals(expected.getBody(), result.getBody());
     }
 
     @Test
     void LoginUser_Valid_ReturnsLoginResponse() {
+        // given
         LoginRequestDto loginRequestDto = LoginRequestDto.builder()
                 .username("aadu")
                 .password("salajane")
@@ -57,6 +69,12 @@ class AuthenticateUserControllerTest {
                 .id(1)
                 .build();
         given(authenticateUserService.loginUser(loginRequestDto)).willReturn(loginResponseDto);
-        assertEquals(loginResponseDto, authenticateUserController.loginUser(loginRequestDto));
+
+        // when
+        var result = authenticateUserController.loginUser(loginRequestDto);
+
+        // then
+        then(authenticateUserService).should().loginUser(loginRequestDto);
+        assertEquals(loginResponseDto, result);
     }
 }
