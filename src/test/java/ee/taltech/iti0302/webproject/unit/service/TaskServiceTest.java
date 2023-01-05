@@ -1,4 +1,4 @@
-package ee.taltech.iti0302.webproject.service;
+package ee.taltech.iti0302.webproject.unit.service;
 
 import ee.taltech.iti0302.webproject.dto.task.CreateTaskDto;
 import ee.taltech.iti0302.webproject.dto.task.PaginatedTaskDto;
@@ -6,6 +6,7 @@ import ee.taltech.iti0302.webproject.entity.*;
 import ee.taltech.iti0302.webproject.exception.ResourceNotFoundException;
 import ee.taltech.iti0302.webproject.mapper.TaskMapper;
 import ee.taltech.iti0302.webproject.repository.*;
+import ee.taltech.iti0302.webproject.service.TaskService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
