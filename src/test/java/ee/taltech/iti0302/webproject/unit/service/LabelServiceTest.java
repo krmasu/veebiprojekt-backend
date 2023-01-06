@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -32,7 +33,7 @@ class LabelServiceTest {
     private LabelService labelService;
     @Mock
     private LabelRepository labelRepository;
-    @Mock
+    @Spy
     private LabelMapper labelMapper = new LabelMapperImpl();
     @Mock
     private ProjectRepository projectRepository;

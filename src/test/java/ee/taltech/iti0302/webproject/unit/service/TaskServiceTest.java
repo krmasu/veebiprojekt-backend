@@ -3,12 +3,7 @@ package ee.taltech.iti0302.webproject.unit.service;
 import ee.taltech.iti0302.webproject.dto.task.CreateTaskDto;
 import ee.taltech.iti0302.webproject.dto.task.PaginatedTaskDto;
 import ee.taltech.iti0302.webproject.dto.task.UpdateTaskDto;
-import ee.taltech.iti0302.webproject.entity.AppUser;
-import ee.taltech.iti0302.webproject.entity.Label;
-import ee.taltech.iti0302.webproject.entity.Milestone;
-import ee.taltech.iti0302.webproject.entity.Project;
-import ee.taltech.iti0302.webproject.entity.Status;
-import ee.taltech.iti0302.webproject.entity.Task;
+import ee.taltech.iti0302.webproject.entity.*;
 import ee.taltech.iti0302.webproject.exception.ResourceNotFoundException;
 import ee.taltech.iti0302.webproject.mapper.TaskMapper;
 import ee.taltech.iti0302.webproject.repository.LabelRepository;
@@ -17,11 +12,14 @@ import ee.taltech.iti0302.webproject.repository.ProjectRepository;
 import ee.taltech.iti0302.webproject.repository.StatusRepository;
 import ee.taltech.iti0302.webproject.repository.TaskRepository;
 import ee.taltech.iti0302.webproject.repository.UserRepository;
+import ee.taltech.iti0302.webproject.mapper.TaskMapperImpl;
+import ee.taltech.iti0302.webproject.repository.*;
 import ee.taltech.iti0302.webproject.service.TaskService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,8 +39,8 @@ class TaskServiceTest {
     private static final Pageable PAGEABLE_SIZE_5 = Pageable.ofSize(5);
     @Mock
     private ProjectRepository projectRepository;
-    @Mock
-    private TaskMapper taskMapper;
+    @Spy
+    private TaskMapper taskMapper = new TaskMapperImpl();
     @Mock
     private TaskRepository taskRepository;
     @Mock

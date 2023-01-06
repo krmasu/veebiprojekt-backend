@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -31,8 +32,8 @@ class ProjectServiceTest {
     private ProjectService projectService;
     @Mock
     private ProjectRepository projectRepository;
-    @Mock
-    private ProjectMapper projectMapper;
+    @Spy
+    private ProjectMapper projectMapper = new ProjectMapperImpl();
     @Mock
     private UserRepository userRepository;
 
@@ -62,7 +63,6 @@ class ProjectServiceTest {
         given(projectMapper.toEntity(createProjectDto)).willReturn(project);
         given(userRepository.findById(1)).willReturn(Optional.of(user));
         given(projectRepository.save(project)).willReturn(project);
-        given(projectMapper.toDtoList(List.of(project))).willReturn(List.of(projectDto));
 
         // when
         var result = projectService.createProject(createProjectDto);
