@@ -1,7 +1,9 @@
 package ee.taltech.iti0302.webproject.unit.service;
 
 import ee.taltech.iti0302.webproject.dto.project.CreateProjectDto;
+import ee.taltech.iti0302.webproject.dto.project.DeleteProjectDto;
 import ee.taltech.iti0302.webproject.dto.project.ProjectDto;
+import ee.taltech.iti0302.webproject.dto.project.UpdateProjectDto;
 import ee.taltech.iti0302.webproject.entity.AppUser;
 import ee.taltech.iti0302.webproject.entity.Project;
 import ee.taltech.iti0302.webproject.mapper.ProjectMapper;
@@ -13,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -72,5 +73,47 @@ class ProjectServiceTest {
         then(projectRepository).should().save(project);
         then(projectMapper).should().toDtoList(List.of(project));
         assertEquals(1, result.get(0).getId());
+    }
+
+    @Test
+    void deleteById_ValidData_ReturnsListOfProjectDtos() {
+        // given
+        DeleteProjectDto deleteProjectDto = DeleteProjectDto.builder()
+                .projectId(1)
+                .ownerId(1).build();
+        Project project = Project.builder().id(1).build();
+        List<Project> projects = new ArrayList<>();
+        projects.add(project);
+        AppUser user = AppUser.builder().id(1).projects(projects).build();
+        given(userRepository.findById(1)).willReturn(Optional.of(user));
+        given(projectRepository.findById(1)).willReturn(Optional.of(project));
+        given(projectMapper.toDtoList(List.of())).willReturn(List.of());
+        // when
+        var result = projectService.deleteById(deleteProjectDto);
+
+        // then
+        then(userRepository).should().findById(1);
+        then(projectRepository).should().findById(1);
+        then(projectRepository).should().deleteById(1);
+        then(projectMapper).should().toDtoList(List.of());
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void updateProject_ValidData_ReturnsProjectDto() {
+        // given
+        UpdateProjectDto updateProjectDto = UpdateProjectDto.builder()
+                .projectId(1)
+                .title("new title").build();
+        Project project = Project.builder().id(1).build();
+        given(projectRepository.findById(1)).willReturn(Optional.of(project));
+
+        // when
+        var result = projectService.updateProject(updateProjectDto);
+
+        // then
+        then(projectRepository).should().findById(1);
+        then(projectMapper).should().updateProjectFromDto(updateProjectDto, project);
+
     }
 }
