@@ -81,6 +81,6 @@ public class MilestoneService {
     public PaginatedMilestoneDto deleteMilestone(Integer projectId, Integer milestoneId, Pageable pageable) {
         milestoneRepository.deleteById(milestoneId);
         Page<Milestone> milestones = milestoneRepository.findAllByProjectId(projectId, pageable);
-        return milestoneMapper.toPaginatedDto(milestones.getTotalPages(), pageable.getPageNumber(), pageable.getPageSize(), milestonesToMilestoneDtos(milestones.getContent()));
+        return milestoneMapper.toPaginatedDto(milestones.getTotalPages(), milestones.getNumber(), milestones.getSize(), milestonesToMilestoneDtos(milestones.getContent()));
     }
 }

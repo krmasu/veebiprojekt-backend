@@ -2,19 +2,29 @@ package ee.taltech.iti0302.webproject.unit.service;
 
 import ee.taltech.iti0302.webproject.dto.task.CreateTaskDto;
 import ee.taltech.iti0302.webproject.dto.task.PaginatedTaskDto;
+import ee.taltech.iti0302.webproject.dto.task.UpdateTaskDto;
 import ee.taltech.iti0302.webproject.entity.*;
 import ee.taltech.iti0302.webproject.exception.ResourceNotFoundException;
 import ee.taltech.iti0302.webproject.mapper.TaskMapper;
+import ee.taltech.iti0302.webproject.repository.LabelRepository;
+import ee.taltech.iti0302.webproject.repository.MilestoneRepository;
+import ee.taltech.iti0302.webproject.repository.ProjectRepository;
+import ee.taltech.iti0302.webproject.repository.StatusRepository;
+import ee.taltech.iti0302.webproject.repository.TaskRepository;
+import ee.taltech.iti0302.webproject.repository.UserRepository;
+import ee.taltech.iti0302.webproject.mapper.TaskMapperImpl;
 import ee.taltech.iti0302.webproject.repository.*;
 import ee.taltech.iti0302.webproject.service.TaskService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,8 +39,8 @@ class TaskServiceTest {
     private static final Pageable PAGEABLE_SIZE_5 = Pageable.ofSize(5);
     @Mock
     private ProjectRepository projectRepository;
-    @Mock
-    private TaskMapper taskMapper;
+    @Spy
+    private TaskMapper taskMapper = new TaskMapperImpl();
     @Mock
     private TaskRepository taskRepository;
     @Mock
@@ -41,7 +51,6 @@ class TaskServiceTest {
     private StatusRepository statusRepository;
     @Mock
     private LabelRepository labelRepository;
-
     @InjectMocks
     private TaskService taskService;
 
@@ -286,5 +295,57 @@ class TaskServiceTest {
                 PAGEABLE_SIZE_5.getPageNumber(),
                 PAGEABLE_SIZE_5.getPageSize(),
                 new ArrayList<>());
+    }
+
+    @Test
+    void updateTask_GivenAllUpdatableVariables_ReturnsPaginatedTaskDto() {
+        // given
+        LocalDate date = LocalDate.now().plusDays(5);
+        UpdateTaskDto updateTaskDto = UpdateTaskDto.builder()
+                .title("new title")
+                .deadline(date)
+                .description("new description")
+                .assigneeId(1)
+                .statusId(2)
+                .labelIds(List.of(1))
+                .milestoneId(1)
+                .build();
+        Pageable pageable = Pageable.unpaged();
+        Task task = Task.builder()
+                .id(1)
+                .description("description")
+                .title("title").build();
+        AppUser user = AppUser.builder()
+                .id(1)
+                .build();
+        Status status = Status.builder()
+                .id(2).build();
+        Milestone milestone = Milestone.builder()
+                .id(1).build();
+        List<Label> labels = List.of(Label.builder().id(1).build());
+        Page<Task> taskPage = Page.empty();
+        PaginatedTaskDto paginatedTaskDto = PaginatedTaskDto.builder()
+                .tasks(List.of()).build();
+        given(taskRepository.findById(1)).willReturn(Optional.of(task));
+        given(userRepository.findById(1)).willReturn(Optional.of(user));
+        given(statusRepository.findById(2)).willReturn(Optional.of(status));
+        given(labelRepository.findAllById(List.of(1))).willReturn(labels);
+        given(milestoneRepository.findById(1)).willReturn(Optional.of(milestone));
+        given(taskRepository.findAllByProjectId(1, pageable)).willReturn(taskPage);
+        given(taskMapper.toPaginatedDto(1, 0, 0, new ArrayList<>())).willReturn(paginatedTaskDto);
+
+        // when
+        var result = taskService.updateTask(1, updateTaskDto, pageable, 1);
+
+        // then
+        then(taskRepository).should().findById(1);
+        then(taskMapper).should().updateTaskFromDto(updateTaskDto, task);
+        then(userRepository).should().findById(1);
+        then(statusRepository).should().findById(2);
+        then(labelRepository).should().findAllById(List.of(1));
+        then(milestoneRepository).should().findById(1);
+        then(taskRepository).should().findAllByProjectId(1, pageable);
+        then(taskMapper).should().toPaginatedDto(1, 0, 0, List.of());
+        assertEquals(0, result.getTasks().size());
     }
 }

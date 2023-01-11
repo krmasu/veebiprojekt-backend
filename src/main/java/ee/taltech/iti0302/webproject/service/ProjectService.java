@@ -31,8 +31,7 @@ public class ProjectService {
     }
 
     public List<ProjectDto> createProject(CreateProjectDto createProjectDto) {
-        Project project = new Project();
-        project.setTitle(createProjectDto.getTitle());
+        Project project = projectMapper.toEntity(createProjectDto);
 
         Integer userId = createProjectDto.getOwnerId();
         AppUser user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found when trying to create new project"));

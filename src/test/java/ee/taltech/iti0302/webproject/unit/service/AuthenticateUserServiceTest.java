@@ -52,7 +52,6 @@ class AuthenticateUserServiceTest {
 
     @Spy
     private PasswordEncoder passwordEncoder;
-    private static final long TWELVE_HOURS_AS_MILLI = 43200000;
 
 
     @Test
@@ -175,7 +174,6 @@ class AuthenticateUserServiceTest {
         // then
         then(userRepository).should().findByUsernameIgnoreCase("username");
     }
-
     @Test
     void loginUser_InvalidPassword_ThrowsInvalidCredentialsException() {
         // given

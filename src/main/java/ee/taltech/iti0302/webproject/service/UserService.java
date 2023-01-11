@@ -4,6 +4,7 @@ import ee.taltech.iti0302.webproject.dto.project.AddMembersToProjectDto;
 import ee.taltech.iti0302.webproject.dto.project.ProjectDto;
 import ee.taltech.iti0302.webproject.dto.user.PaginatedUserResponseDto;
 import ee.taltech.iti0302.webproject.dto.user.UserDto;
+import ee.taltech.iti0302.webproject.dto.user.UserResponseDto;
 import ee.taltech.iti0302.webproject.entity.AppUser;
 import ee.taltech.iti0302.webproject.entity.Project;
 import ee.taltech.iti0302.webproject.exception.ResourceNotFoundException;
