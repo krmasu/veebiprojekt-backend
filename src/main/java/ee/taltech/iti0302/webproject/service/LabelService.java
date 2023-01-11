@@ -38,7 +38,7 @@ public class LabelService {
         return labelMapper.toPaginatedDto(labels.getTotalPages(), labels.getNumber(), labels.getSize(), labelsToLabelDtos(labels.getContent()));
     }
 
-    public List<LabelDto> labelsToLabelDtos(List<Label> labels) {
+    private List<LabelDto> labelsToLabelDtos(List<Label> labels) {
         List<LabelDto> dtos = new ArrayList<>();
         for (Label label : labels) {
             LabelDto dto = labelMapper.toDto(label);

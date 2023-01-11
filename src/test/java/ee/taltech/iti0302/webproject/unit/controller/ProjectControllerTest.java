@@ -8,7 +8,6 @@ import ee.taltech.iti0302.webproject.dto.project.ProjectDto;
 import ee.taltech.iti0302.webproject.dto.project.UpdateProjectDto;
 import ee.taltech.iti0302.webproject.dto.user.UserResponseDto;
 import ee.taltech.iti0302.webproject.service.ProjectService;
-import org.apache.catalina.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -135,65 +134,5 @@ class ProjectControllerTest {
         // then
         then(projectService).should().deleteById(deleteProjectDto);
         assertEquals(2, result.size());
-    }
-
-    @Test
-    void GetProjectMembers_MultipleMembers_ReturnsListOfUserResponseDtos() {
-        // given
-        List<UserResponseDto> userResponseDtos = new ArrayList<>();
-        UserResponseDto userResponseDto1 = UserResponseDto.builder()
-                .id(1)
-                .username("aadu1")
-                .build();
-        UserResponseDto userResponseDto2 = UserResponseDto.builder()
-                .id(2)
-                .username("aadu2")
-                .build();
-        UserResponseDto userResponseDto3 = UserResponseDto.builder()
-                .id(3)
-                .username("aadu3")
-                .build();
-        userResponseDtos.add(userResponseDto1);
-        userResponseDtos.add(userResponseDto2);
-        userResponseDtos.add(userResponseDto3);
-
-        given(projectService.getProjectMembers(1)).willReturn(userResponseDtos);
-        // when
-        var result = projectController.getProjectMembers(1, principal);
-        // then
-        then(projectService).should().getProjectMembers(1);
-        assertEquals(3, result.size());
-        assertTrue(result.contains(userResponseDto3));
-    }
-
-    @Test
-    void AddNewProjectMembers_AddMultiple_ReturnsListOfUserResponseDto() {
-        // given
-        AddMembersToProjectDto addMembersToProjectDto = AddMembersToProjectDto.builder()
-                .userIds(List.of(2, 3))
-                .build();
-        List<UserResponseDto> userResponseDtos = new ArrayList<>();
-        UserResponseDto userResponseDto1 = UserResponseDto.builder()
-                .id(1)
-                .username("aadu1")
-                .build();
-        UserResponseDto userResponseDto2 = UserResponseDto.builder()
-                .id(2)
-                .username("aadu2")
-                .build();
-        UserResponseDto userResponseDto3 = UserResponseDto.builder()
-                .id(3)
-                .username("aadu3")
-                .build();
-        userResponseDtos.add(userResponseDto1);
-        userResponseDtos.add(userResponseDto2);
-        userResponseDtos.add(userResponseDto3);
-
-        given(projectService.addNewProjectMembers(1, addMembersToProjectDto)).willReturn(userResponseDtos);
-        // when
-        var result = projectController.addNewProjectMembers(1, addMembersToProjectDto);
-        // then
-        then(projectService).should().addNewProjectMembers(1, addMembersToProjectDto);
-        assertEquals(3, result.size());
     }
 }

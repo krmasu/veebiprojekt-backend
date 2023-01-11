@@ -1,7 +1,5 @@
 package ee.taltech.iti0302.webproject.controller;
 
-import ee.taltech.iti0302.webproject.dto.project.AddMembersToProjectDto;
-import ee.taltech.iti0302.webproject.dto.user.UserResponseDto;
 import ee.taltech.iti0302.webproject.dto.project.CreateProjectDto;
 import ee.taltech.iti0302.webproject.dto.project.DeleteProjectDto;
 import ee.taltech.iti0302.webproject.dto.project.ProjectDto;
@@ -29,19 +27,22 @@ public class ProjectController {
     private static final Logger log = LoggerFactory.getLogger(ProjectController.class);
 
     @GetMapping("api/project/{projectId}")
-    public ProjectDto getProjectById(@PathVariable("projectId") Integer projectId, Principal principal) {
+    public ProjectDto getProjectById(@PathVariable("projectId") Integer projectId,
+                                     Principal principal) {
         log.info("Getting project with id: {} for user with id: {}", projectId, principal.getName());
         return projectService.findById(projectId);
     }
 
     @PostMapping("api/project")
-    public List<ProjectDto> createProject(@RequestBody CreateProjectDto createProjectDto, Principal principal) {
+    public List<ProjectDto> createProject(@RequestBody CreateProjectDto createProjectDto,
+                                          Principal principal) {
         log.info("Creating new project for user with id: {}", principal.getName());
         return projectService.createProject(createProjectDto);
     }
 
     @PatchMapping("api/project")
-    public ProjectDto updateProject(@RequestBody UpdateProjectDto updateProjectDto, Principal principal) {
+    public ProjectDto updateProject(@RequestBody UpdateProjectDto updateProjectDto,
+                                    Principal principal) {
         log.info("Updating project with id: {} for user with id: {}", updateProjectDto.getProjectId(), principal.getName());
         return projectService.updateProject(updateProjectDto);
     }
@@ -51,17 +52,5 @@ public class ProjectController {
     public List<ProjectDto> deleteProject(@RequestBody DeleteProjectDto deleteProjectDto) {
         log.info("Deleting project with id: {} for user with id: {}", deleteProjectDto.getProjectId(), deleteProjectDto.getOwnerId());
         return projectService.deleteById(deleteProjectDto);
-    }
-
-    @GetMapping("api/project/{projectId}/member")
-    public List<UserResponseDto> getProjectMembers(@PathVariable("projectId") Integer projectId, Principal principal) {
-        log.info("Getting members for project with id: {} for user with id: {}", projectId, principal.getName());
-        return projectService.getProjectMembers(projectId);
-    }
-
-    @PostMapping("api/project/{projectId}/member")
-    public List<UserResponseDto> addNewProjectMembers(@PathVariable("projectId") Integer projectId, @RequestBody AddMembersToProjectDto dto) {
-        log.info("Adding new members to project with id: {}", dto);
-        return projectService.addNewProjectMembers(projectId, dto);
     }
 }

@@ -5,6 +5,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -24,17 +26,20 @@ import java.util.Optional;
 @Component
 @AllArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
+    private static final Logger log = LoggerFactory.getLogger(JwtRequestFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Optional<String> jwt = getToken(request);
         if (jwt.isEmpty()) {
+            log.info("No authentication token found");
             filterChain.doFilter(request, response);
             return;
         }
+        log.info("Found authentication token. Parsing token for claims");
         Claims tokenBody = parseToken(jwt.get());
         SecurityContext context = SecurityContextHolder.getContext();
-
+        log.info("Building authentication token");
         UsernamePasswordAuthenticationToken authenticationToken = buildAuthToken(tokenBody);
         context.setAuthentication(authenticationToken);
 

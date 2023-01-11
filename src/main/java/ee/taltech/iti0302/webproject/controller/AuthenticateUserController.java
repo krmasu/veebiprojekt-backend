@@ -2,8 +2,8 @@ package ee.taltech.iti0302.webproject.controller;
 
 import ee.taltech.iti0302.webproject.dto.authentication.LoginRequestDto;
 import ee.taltech.iti0302.webproject.dto.authentication.LoginResponseDto;
+import ee.taltech.iti0302.webproject.dto.authentication.RegisterResponseDto;
 import ee.taltech.iti0302.webproject.dto.authentication.RegisterUserDto;
-import ee.taltech.iti0302.webproject.dto.user.UserCreatedDto;
 import ee.taltech.iti0302.webproject.service.AuthenticateUserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -24,9 +24,9 @@ public class AuthenticateUserController {
     @PostMapping("api/public/register")
     public ResponseEntity<Object> registerUser(@RequestBody RegisterUserDto request) {
         log.info("Registering new user with name: {}", request.getUsername());
-        Integer userId = authenticateUserService.registerUser(request);
-        log.info("Registration successful for user with id: {}", userId);
-        return new ResponseEntity<>(new UserCreatedDto("Registration successful", true), HttpStatus.CREATED);
+        RegisterResponseDto registerResponseDto = authenticateUserService.registerUser(request);
+        log.info("Registration successful for user with id: {}", registerResponseDto.getId());
+        return new ResponseEntity<>(registerResponseDto, HttpStatus.CREATED);
     }
 
     @PostMapping("api/public/login")
