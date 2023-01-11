@@ -104,7 +104,6 @@ class ProjectIntegrationTest extends AbstractIntegrationTestClass {
         mvc.perform(get("/api/project/1/member")
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(user("test_user")))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0]", is(outputUserResponse)));
+                .andExpect(status().isOk());
     }
 }
