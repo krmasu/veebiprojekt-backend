@@ -64,6 +64,7 @@ public class LabelService {
     public PaginatedLabelDto deleteLabel(Integer projectId, Integer labelId, Pageable pageable) {
         labelRepository.deleteById(labelId);
 
+
         Page<Label> labels = labelRepository.findAllByProjectId(projectId, pageable);
         return labelMapper.toPaginatedDto(labels.getTotalPages(), labels.getNumber(), labels.getSize(), labelsToLabelDtos(labels.getContent()));
     }
