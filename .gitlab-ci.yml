@@ -11,7 +11,7 @@ build backend:
     - backend-runner
   script:
     - ./mvnw package
-    - docker build -t web-project-backend .
+    - docker build -t uusnimi .
 
 deploy backend:
   stage: deploy
